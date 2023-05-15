@@ -39,3 +39,22 @@ body {
   background-color: #ffffffcc;
   backdrop-filter: blur(5px);
 }
+
+.smartphone {
+  width: 200px;
+  height: 400px;
+  /* background-color: #000; */
+  border-radius: 25px;
+  border: 10px solid black;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+}
+
+.screen {
+  width: 100%;
+  height: 100%;
+  /* background-color: #fff; */
+  overflow: auto;
+  padding: 5px;
+}

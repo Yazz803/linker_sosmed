@@ -4,6 +4,7 @@ import NavbarAdmin from "../components/Admin/NavbarAdmin";
 import { useRouter } from "next/router";
 import { useAuth } from "yazz/context/AuthContext";
 import { Form, Input } from "antd";
+import PreviewWeb from "../components/Admin/PreviewWeb";
 
 export default function AppearancePage() {
   const router = useRouter();
@@ -57,7 +58,9 @@ export default function AppearancePage() {
                   </div>
                 </div>
               </div>
-              <div className="w-[40%] border-l pt-24 border-gray-300 h-screen sticky top-0"></div>
+              <div className="w-[40%] border-l flex items-center justify-center border-gray-300 h-screen sticky top-0">
+                <PreviewWeb />
+              </div>
             </div>
           </div>
         </>

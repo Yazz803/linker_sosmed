@@ -3,9 +3,12 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/router";
 import React from "react";
 import { auth } from "yazz/config/firebase";
+import GetCollection, { addDataDoc } from "../helpers";
+import { serverTimestamp } from "firebase/firestore";
 
 export default function SignInWithGoogle() {
   const router = useRouter();
+  const dataUsers = GetCollection("users");
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: "select_account" });
   const onClickSignIn = () => {
@@ -13,6 +16,19 @@ export default function SignInWithGoogle() {
       .then((res) => {
         router.push("/admin");
         message.success("Berhasil Login!");
+        let dataUser = {
+          uid: res.user.uid,
+          username: res.user.displayName.split(" ").join("").toLowerCase(),
+          name: res.user.displayName,
+          email: res.user.email,
+          photoURL: res.user.photoURL,
+          createdAt: serverTimestamp(),
+        };
+        dataUsers.map((doc) => {
+          if (doc.data().uid !== res.user.uid) {
+            addDataDoc("users", dataUser);
+          }
+        });
         const user = res.user;
         console.log({ user });
       })

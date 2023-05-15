@@ -24,9 +24,12 @@ export default function SignInWithGoogle() {
           photoURL: res.user.photoURL,
           createdAt: serverTimestamp(),
         };
+        let isAddDataDocExecuted = false;
         dataUsers.map((doc) => {
-          if (doc.data().uid !== res.user.uid) {
+          if (doc.data().uid === res.user.uid) isAddDataDocExecuted = true;
+          if (doc.data().uid !== res.user.uid && !isAddDataDocExecuted) {
             addDataDoc("users", dataUser);
+            isAddDataDocExecuted = true;
           }
         });
         const user = res.user;

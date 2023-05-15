@@ -7,7 +7,7 @@ import {
   PicCenterOutlined,
   PieChartOutlined,
 } from "@ant-design/icons";
-import { Logout } from "../Logout";
+import Logout from "../Logout";
 import { useRouter } from "next/router";
 
 export default function Navbar() {

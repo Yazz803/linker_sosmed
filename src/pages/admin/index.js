@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { Logout } from "../components/Logout";
+import Logout from "../components/Logout";
 import { useAuth } from "yazz/context/AuthContext";
 import NavbarAdmin from "../components/Admin/NavbarAdmin";
 

@@ -16,12 +16,26 @@
   }
 }
 
+@layer base {
+  
+}
+
+
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: rgb(241, 241, 241);
+}
+
+
+.login__page {
+  background-image: url("../../public/images/WpLogin.jpg");
+  color: white !important;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.login__form {
+  background-color: #ffffffcc;
+  backdrop-filter: blur(5px);
 }

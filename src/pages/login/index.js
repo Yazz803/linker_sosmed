@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Form, Input, Checkbox, Divider } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import SignInWithGoogle from "../utils/SignInProvider/SignInWithGoogle";
-import SignInWithGithub from "../utils/SignInProvider/SignInWithGithub";
+import SignInWithGoogle from "yazz/utils/SignInProvider/SignInWithGoogle";
+import SignInWithGithub from "yazz/utils/SignInProvider/SignInWithGithub";
 import { useRouter } from "next/router";
 import { useAuth } from "yazz/context/AuthContext";
 // import { GetCollection } from "../utils/helpers";

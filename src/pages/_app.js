@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }) {
     `;
     nProgress.configure({ showSpinner: false, template: template });
     Router.events.on("routeChangeStart", (url) => {
-      console.log(nProgress);
+      // console.log(nProgress);
       nProgress.start();
     });
 

@@ -3,7 +3,12 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/router";
 import React from "react";
 import { auth } from "yazz/config/firebase";
-import GetCollection, { addDataDoc } from "../helpers";
+import GetCollection, {
+  addDataDoc,
+  addDataSubCollection,
+  modifyWord,
+  randomInt,
+} from "../helpers";
 import { serverTimestamp } from "firebase/firestore";
 
 export default function SignInWithGoogle() {
@@ -18,22 +23,40 @@ export default function SignInWithGoogle() {
         message.success("Berhasil Login!");
         let dataUser = {
           uid: res.user.uid,
-          username: res.user.displayName.split(" ").join("").toLowerCase(),
           name: res.user.displayName,
           email: res.user.email,
           photoURL: res.user.photoURL,
+          username: modifyWord(res.user.displayName, 5) + randomInt(4),
+          bio: "This is your bio",
           createdAt: serverTimestamp(),
         };
         let isAddDataDocExecuted = false;
         dataUsers.map((doc) => {
           if (doc.data().uid === res.user.uid) isAddDataDocExecuted = true;
           if (doc.data().uid !== res.user.uid && !isAddDataDocExecuted) {
-            addDataDoc("users", dataUser);
+            let appSettings = {
+              background_color: "#929292",
+              background_image: "none",
+              button_type: "fill-rounded-lg",
+              button_color: "#ffffff",
+              button_font_color: "#888888",
+              font_family: "DM sans",
+              font_color: "#ffffff",
+              createdAt: serverTimestamp(),
+            };
+            addDataDoc("users", dataUser).then((res) => {
+              addDataSubCollection(
+                "users",
+                res.id,
+                "app_settings",
+                appSettings
+              );
+            });
             isAddDataDocExecuted = true;
           }
         });
-        const user = res.user;
-        console.log({ user });
+        // const user = res.user;
+        // console.log({ user });
       })
       .catch((error) => {
         console.log({ error });

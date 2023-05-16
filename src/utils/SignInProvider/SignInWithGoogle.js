@@ -19,6 +19,7 @@ export default function SignInWithGoogle() {
   const onClickSignIn = () => {
     signInWithPopup(auth, provider)
       .then((res) => {
+        const user = dataUsers.find((doc) => doc.data().uid === res.user.uid);
         router.push("/admin");
         message.success("Berhasil Login!");
         let dataUser = {
@@ -30,33 +31,21 @@ export default function SignInWithGoogle() {
           bio: "This is your bio",
           createdAt: serverTimestamp(),
         };
-        let isAddDataDocExecuted = false;
-        dataUsers.map((doc) => {
-          if (doc.data().uid === res.user.uid) isAddDataDocExecuted = true;
-          if (doc.data().uid !== res.user.uid && !isAddDataDocExecuted) {
-            let appSettings = {
-              background_color: "#929292",
-              background_image: "none",
-              button_type: "fill-rounded-lg",
-              button_color: "#ffffff",
-              button_font_color: "#888888",
-              font_family: "DM sans",
-              font_color: "#ffffff",
-              createdAt: serverTimestamp(),
-            };
-            addDataDoc("users", dataUser).then((res) => {
-              addDataSubCollection(
-                "users",
-                res.id,
-                "app_settings",
-                appSettings
-              );
-            });
-            isAddDataDocExecuted = true;
-          }
-        });
-        // const user = res.user;
-        // console.log({ user });
+        let appSettings = {
+          background_color: "#929292",
+          background_image: "none",
+          button_type: "fill-rounded-lg",
+          button_color: "#ffffff",
+          button_font_color: "#888888",
+          font_family: "DM sans",
+          font_color: "#ffffff",
+          createdAt: serverTimestamp(),
+        };
+        if (!user) {
+          addDataDoc("users", dataUser).then((res) => {
+            addDataSubCollection("users", res.id, "app_settings", appSettings);
+          });
+        }
       })
       .catch((error) => {
         console.log({ error });

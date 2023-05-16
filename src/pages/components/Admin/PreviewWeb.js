@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { useAuth } from "yazz/context/AuthContext";
-import GetCollection from "yazz/pages/utils/helpers";
+import GetCollection from "yazz/utils/helpers";
 
 export default function PreviewWeb() {
   const { currentUser } = useAuth();

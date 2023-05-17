@@ -9,9 +9,13 @@ import {
 } from "@ant-design/icons";
 import Logout from "../Logout";
 import { useRouter } from "next/router";
+import { getUser } from "yazz/utils/helpers";
+import { useAuth } from "yazz/context/AuthContext";
 
 export default function Navbar() {
   const router = useRouter();
+  const { currentUser } = useAuth();
+  const user = getUser("uid", currentUser?.uid);
   const [open, setOpen] = useState(false);
   const handleMenuClick = (e) => {
     if (e.key === "2121") {
@@ -27,14 +31,16 @@ export default function Navbar() {
         <div className="flex gap-2 pl-2 pr-24 py-4">
           <div>
             <img
-              src={auth.currentUser.photoURL}
+              src={user?.data().photoURL}
               className="w-11 rounded-full cursor-pointer"
               alt="Photo Profile"
             />
           </div>
           <div>
-            <h1 className="text-xl font-semibold m-0">Yazz</h1>
-            <h1 className="text-l font-semibold">yazzlink.ee/yazz</h1>
+            <h1 className="text-xl font-semibold m-0">{user?.data().name}</h1>
+            <h1 className="text-l font-semibold">
+              {process.env.NEXT_PUBLIC_SITE_URL}/{user?.data().username}
+            </h1>
           </div>
         </div>
       ),
@@ -76,7 +82,7 @@ export default function Navbar() {
           onOpenChange={handleOpenChange}
         >
           <img
-            src={auth.currentUser.photoURL}
+            src={user?.data().photoURL}
             className="w-11 rounded-full cursor-pointer"
             alt="Photo Profile"
             onClick={() => setOpen(!open)}

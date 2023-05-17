@@ -6,8 +6,7 @@ import { auth } from "yazz/config/firebase";
 import GetCollection, {
   addDataDoc,
   addDataSubCollection,
-  modifyWord,
-  randomInt,
+  generateUsername,
 } from "../helpers";
 import { serverTimestamp } from "firebase/firestore";
 
@@ -27,7 +26,8 @@ export default function SignInWithGoogle() {
           name: res.user.displayName,
           email: res.user.email,
           photoURL: res.user.photoURL,
-          username: modifyWord(res.user.displayName, 5) + randomInt(4),
+          username: generateUsername(res.user.displayName),
+          profile_title: generateUsername(res.user.displayName),
           bio: "This is your bio",
           createdAt: serverTimestamp(),
         };
@@ -43,7 +43,12 @@ export default function SignInWithGoogle() {
         };
         if (!user) {
           addDataDoc("users", dataUser).then((res) => {
-            addDataSubCollection("users", res.id, "app_settings", appSettings);
+            addDataSubCollection(
+              "users",
+              res.id,
+              "appearance_settings",
+              appSettings
+            );
           });
         }
       })

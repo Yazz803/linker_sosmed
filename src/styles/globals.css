@@ -22,6 +22,13 @@
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
+.black {
+  background-color: black;
+}
+
+.white {
+  background-color: white;
+}
 
 body {
   color: rgb(var(--foreground-rgb));

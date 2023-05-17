@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }) {
       <div class="spinner-icon"></div>
     </div>
     `;
-    nProgress.configure({ showSpinner: false, template: template });
+    nProgress.configure({ showSpinner: true, template: template });
     Router.events.on("routeChangeStart", (url) => {
       // console.log(nProgress);
       nProgress.start();

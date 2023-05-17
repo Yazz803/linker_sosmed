@@ -39,6 +39,17 @@ export function GetSubCollection(
   return data?.docs || [];
 }
 
+export function getUser(field, compareField) {
+  const users = GetCollection("users");
+  const user = users.find((doc) => doc.data()[field] === compareField);
+  return user;
+}
+
+export function getAppearance(userId) {
+  const result = GetSubCollection(`users/${userId}/appearance_settings`)[0];
+  return result;
+}
+
 export async function addDataSubCollection(
   collectionName,
   docId,
@@ -96,4 +107,9 @@ export function modifyWord(word, count) {
   }
 
   return modifiedWord.split(" ").join("");
+}
+
+export function generateUsername(username) {
+  let result = modifyWord(username, 5) + randomInt(4);
+  return result;
 }

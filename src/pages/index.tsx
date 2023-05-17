@@ -1,3 +1,4 @@
+import { env } from "process"
 import React from "react"
 import Image from "next/image"
 import { useRouter } from "next/router"
@@ -26,7 +27,13 @@ export const Index = (): JSX.Element => {
       (document) => document.data().uid === currentUser?.uid
     )
     const username = foundUser?.data().username
-    navigator.clipboard.writeText(`http://localhost:3000/u/${username}`)
+    if (env.NODE_ENV === "production") {
+      navigator.clipboard.writeText(
+        `https://linker-sosmed.vercel.app//u/${username}`
+      )
+    } else {
+      navigator.clipboard.writeText(`http://localhost:3000/u/${username}`)
+    }
     toast({
       title: "Copied",
       description: "Link copied to clipboard",

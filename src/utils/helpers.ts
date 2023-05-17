@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react"
 import { db } from "@/config/firebase"
 import {
   DocumentData,
@@ -6,6 +7,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDocs,
   limit,
   orderBy,
   query,
@@ -39,6 +41,41 @@ export default function GetCollection(
     )
   )
   return data?.docs || []
+}
+
+export function useGetCollection(
+  collectionName: string,
+  customQuery: CustomQuery = {
+    orderBy: ["createdAt", "desc"],
+    limit: 1000,
+  }
+) {
+  const { orderBy: orderByValue, limit: limitValue } = customQuery
+  const [data, setData] = useState<any[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const collectionRef = collection(db, collectionName)
+        const q = query(
+          collectionRef,
+          orderBy(orderByValue[0], orderByValue[1]),
+          limit(limitValue)
+        )
+        const querySnapshot = await getDocs(q)
+        const documents = querySnapshot.docs.map((doc) => doc.data())
+        setData(documents)
+        setLoading(false)
+      } catch (error) {
+        console.error("Error fetching collection:", error)
+      }
+    }
+
+    fetchData()
+  }, [collectionName, orderByValue, limitValue])
+
+  return { data, loading }
 }
 
 export function GetSubCollection(

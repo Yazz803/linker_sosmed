@@ -58,8 +58,8 @@ export const Index = (): JSX.Element => {
             </div>
           ) : (
             <>
-              {dataUsers.map((dataUser: User, i: number) => {
-                if (dataUser.uid === currentUser.uid) {
+              {dataUsers.map((user: User, i: number) => {
+                if (user.uid === currentUser.uid) {
                   return (
                     <div className="px-16" key={i}>
                       <div className="flex">
@@ -98,7 +98,7 @@ export const Index = (): JSX.Element => {
                                   <Input
                                     placeholder="Profile Title"
                                     maxLength={30}
-                                    defaultValue={dataUser.username}
+                                    defaultValue={user.username}
                                   />
                                   <p className="text-sm text-muted-foreground">
                                     Masukan Profile Title.
@@ -110,11 +110,11 @@ export const Index = (): JSX.Element => {
                                     placeholder="Bio"
                                     maxLength={80}
                                     onChange={(e) => {
-                                      updateDataDoc("users", dataUser.id, {
+                                      updateDataDoc("users", user.id, {
                                         bio: e.target.value,
                                       })
                                     }}
-                                    defaultValue={dataUser.bio}
+                                    defaultValue={user.bio}
                                   />
                                   <p className="text-sm text-muted-foreground">
                                     Masukan Bio

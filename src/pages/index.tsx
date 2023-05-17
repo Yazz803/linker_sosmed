@@ -29,7 +29,7 @@ export const Index = (): JSX.Element => {
     const username = foundUser?.data().username
     if (process.env.NODE_ENV === "production") {
       navigator.clipboard.writeText(
-        `https://linker-sosmed.vercel.app//u/${username}`
+        `https://linker-sosmed.vercel.app/u/${username}`
       )
     } else {
       navigator.clipboard.writeText(`http://localhost:3000/u/${username}`)

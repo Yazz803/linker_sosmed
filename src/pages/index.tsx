@@ -32,9 +32,9 @@ export const Index = (): JSX.Element => {
 
   const copyMe = () => {
     const foundUser = dataUsers.find(
-      (user) => user.data().uid === currentUser?.uid
+      (user: User) => user.uid === currentUser?.uid
     )
-    const username = foundUser?.data().username
+    const username = foundUser?.username
     if (process.env.NODE_ENV === "production") {
       navigator.clipboard.writeText(
         `https://linker-sosmed.vercel.app/u/${username}`

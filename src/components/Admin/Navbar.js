@@ -1,16 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { Dropdown } from "antd";
 import { useState } from "react";
-import { auth } from "yazz/config/firebase";
-import {
-  ShareAltOutlined,
-  PicCenterOutlined,
-  PieChartOutlined,
-} from "@ant-design/icons";
-import Logout from "../Logout";
+import { PicCenterOutlined, PieChartOutlined } from "@ant-design/icons";
+import LogoutButton from "../LogoutButton";
 import { useRouter } from "next/router";
 import { getUser } from "yazz/utils/helpers";
 import { useAuth } from "yazz/context/AuthContext";
+import NavbarShareButton from "./NavbarShareButton";
 
 export default function Navbar() {
   const router = useRouter();
@@ -47,7 +43,7 @@ export default function Navbar() {
       key: "0",
     },
     {
-      label: <Logout />,
+      label: <LogoutButton />,
       key: "1",
     },
   ];
@@ -72,9 +68,7 @@ export default function Navbar() {
         </h3>
       </div>
       <div className="flex items-center gap-2">
-        <h3 className="cursor-pointer flex items-center gap-2 hover:bg-gray-100 transition-all border font-semibold px-4 py-2 rounded-md m-0">
-          <ShareAltOutlined /> Share
-        </h3>
+        <NavbarShareButton />
         <Dropdown
           menu={{ items: items, onClick: handleMenuClick }}
           trigger={["click"]}

@@ -7,6 +7,7 @@ import {
   addDoc,
   updateDoc,
   doc,
+  deleteDoc,
 } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { message } from "antd";
@@ -50,25 +51,9 @@ export function getAppearance(userId) {
   return result;
 }
 
-export async function addDataSubCollection(
-  collectionName,
-  docId,
-  subCollectionName,
-  data
-) {
+export async function addDataDoc(colPath, data) {
   try {
-    const docRef = doc(db, collectionName, docId);
-    const colRef = collection(docRef, subCollectionName);
-    await addDoc(colRef, data);
-  } catch (error) {
-    console.error("Error adding sub collection: ", error);
-    message.error("Error adding sub collection");
-  }
-}
-
-export async function addDataDoc(collectionName, data) {
-  try {
-    let result = await addDoc(collection(db, collectionName), data);
+    let result = await addDoc(collection(db, ...colPath.split("/")), data);
     return result;
   } catch (error) {
     console.error("Error adding data document: ", error);
@@ -76,12 +61,21 @@ export async function addDataDoc(collectionName, data) {
   }
 }
 
-export async function updateDataDoc(collectionName, docId, data) {
+export async function updateDataDoc(colPath, docId, data) {
   try {
-    await updateDoc(doc(db, collectionName, docId), data);
+    await updateDoc(doc(db, ...colPath.split("/"), docId), data);
   } catch (error) {
     console.error("Error updating data document: ", error);
     message.error("Error updating data document");
+  }
+}
+
+export async function deleteDataDoc(colPath, docId) {
+  try {
+    await deleteDoc(doc(db, ...colPath.split("/"), docId));
+  } catch (error) {
+    console.error("Error deleting data document: ", error);
+    message.error("Error deleting data document");
   }
 }
 
@@ -112,4 +106,9 @@ export function modifyWord(word, count) {
 export function generateUsername(username) {
   let result = modifyWord(username, 5) + randomInt(4);
   return result;
+}
+
+export function copyToClipboard(text) {
+  navigator.clipboard.writeText(text);
+  return message.success("Link berhasil di copy!");
 }

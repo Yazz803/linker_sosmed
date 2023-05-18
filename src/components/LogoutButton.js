@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useAuth } from "yazz/context/AuthContext";
 import { auth } from "yazz/config/firebase";
-export default function Logout() {
+export default function LogoutButton() {
   const { currentUser } = useAuth();
   const router = useRouter();
   const out = () => {

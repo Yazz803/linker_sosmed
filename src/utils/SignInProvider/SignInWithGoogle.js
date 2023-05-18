@@ -3,11 +3,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/router";
 import React from "react";
 import { auth } from "yazz/config/firebase";
-import GetCollection, {
-  addDataDoc,
-  addDataSubCollection,
-  generateUsername,
-} from "../helpers";
+import GetCollection, { addDataDoc, generateUsername } from "../helpers";
 import { serverTimestamp } from "firebase/firestore";
 
 export default function SignInWithGoogle() {
@@ -34,21 +30,17 @@ export default function SignInWithGoogle() {
         let appSettings = {
           background_color: "#929292",
           background_image: "none",
-          button_type: "fill-rounded-lg",
+          button_type: "button-fill-rounded-lg",
           button_color: "#ffffff",
           button_font_color: "#888888",
           font_family: "DM sans",
           font_color: "#ffffff",
+          fill: true,
           createdAt: serverTimestamp(),
         };
         if (!user) {
           addDataDoc("users", dataUser).then((res) => {
-            addDataSubCollection(
-              "users",
-              res.id,
-              "appearance_settings",
-              appSettings
-            );
+            addDataDoc(`users/${res.id}/appearance_settings`, appSettings);
           });
         }
       })

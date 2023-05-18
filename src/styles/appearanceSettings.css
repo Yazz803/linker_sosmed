@@ -1,0 +1,13 @@
+/* BUTTON TYPE */
+.button-fill-rounded-lg {
+    border-radius: 99999px;
+    transition: .3s;
+}
+
+.button-fill-rounded-lg:hover {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.button-bg-\[here] {
+    background-color: here;
+}

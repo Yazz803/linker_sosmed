@@ -1,11 +1,14 @@
 /* eslint-disable no-unused-vars */
 import "yazz/styles/globals.css";
+import "yazz/styles/appearanceSettings.css";
 import "yazz/styles/nprogress.css";
 import "antd/dist/reset.css";
 import { AuthProvider } from "yazz/context/AuthContext";
 import { useEffect } from "react";
 import nProgress from "nprogress";
 import Router from "next/router";
+import { AppContextProvider, useAppContext } from "yazz/context/AppContext";
+import ModalShareButton from "yazz/components/Admin/ModalShareButton";
 
 export default function App({ Component, pageProps }) {
   useEffect(() => {
@@ -32,8 +35,10 @@ export default function App({ Component, pageProps }) {
     });
   }, []);
   return (
-    <AuthProvider>
-      <Component {...pageProps} />
-    </AuthProvider>
+    <AppContextProvider>
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
+    </AppContextProvider>
   );
 }

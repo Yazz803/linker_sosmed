@@ -66,6 +66,8 @@ export default function LinksPage() {
   // let lastListNumber = getLinkListNumber?.data().list_number;
 
   const onSubmit = (values) => {
+    if (links.length >= 10)
+      return message.warning("Link sudah mencapai batas maksimal");
     let data = {
       link: values.link_url,
       title: "Edit your title",
@@ -86,6 +88,8 @@ export default function LinksPage() {
   };
 
   const handleClickAddHeader = () => {
+    if (links.length >= 10)
+      return message.warning("Link sudah mencapai batas maksimal");
     let data = {
       link: "",
       title: "Headline Title",

@@ -5,6 +5,7 @@ import SignInWithGoogle from "yazz/utils/SignInProvider/SignInWithGoogle";
 import SignInWithGithub from "yazz/utils/SignInProvider/SignInWithGithub";
 import { useRouter } from "next/router";
 import { useAuth } from "yazz/context/AuthContext";
+import Metadata from "yazz/components/Metadata";
 // import { GetCollection } from "../utils/helpers";
 
 export default function LoginPage() {
@@ -15,15 +16,27 @@ export default function LoginPage() {
     if (currentUser) router.push("/admin");
   }, [currentUser, router]);
 
-  //   const result = GetCollection("testing", {
-  //     limit: 10,
-  //     orderBy: ["message", "desc"],
-  //   });
-
   return (
     <>
       {!currentUser && (
-        <div className="flex justify-center items-center h-screen login__page">
+        <div className="flex justify-center items-center h-screen login__page costum__bg__image">
+          <Metadata
+            title="Yazzlinker"
+            canonical={process.env.NEXT_PUBLIC_SITE_URL}
+            openGraph={{
+              url: process.env.NEXT_PUBLIC_SITE_URL,
+              title: "Yazzlinker",
+              images: [
+                {
+                  url: "/images/seoimage.jpg",
+                  width: 800,
+                  height: 800,
+                  alt: "Create your own yazzlinker",
+                },
+              ],
+            }}
+            icon="/images/loadingscreen.gif"
+          />
           <Form
             name="normal_login"
             className="login__form border lg:w-1/3 p-8 rounded-lg shadow-lg"
@@ -32,15 +45,6 @@ export default function LoginPage() {
             }}
             onFinish={() => {}}
           >
-            {/* {result.map((doc) => {
-          if (doc.data().message === "testing ajah") {
-            return (
-              <div key={doc.id}>
-                <h1>{doc.data().message}</h1>
-              </div>
-            );
-          }
-        })} */}
             <h2 className="text-center text-2xl font-bold">Welcome back</h2>
             <h2 className="text-center text-ml">Log in to your web app</h2>
             <Form.Item

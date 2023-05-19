@@ -14,6 +14,7 @@ import CardHeader from "yazz/components/Admin/CardHeader";
 import { useMediaQuery } from "react-responsive";
 import ModalShareButton from "yazz/components/Admin/ModalShareButton";
 import { useAppContext } from "yazz/context/AppContext";
+import Metadata from "yazz/components/Metadata";
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = useState(false);
@@ -34,7 +35,7 @@ const SubmitButton = ({ form }) => {
     <button
       type="submit"
       disabled={!submittable}
-      className={`bg-gray-500 hover:bg-gray-600 focus:bg-gray-600 rounded-full py-2 px-6 text-lg text-white ${
+      className={`bg-gray-500 hover:bg-gray-600 focus:bg-gray-600 rounded-full py-1 px-6 text-base text-white ${
         !submittable && "opacity-50 cursor-not-allowed"
       }`}
     >
@@ -106,7 +107,24 @@ export default function LinksPage() {
   return (
     <>
       {user ? (
-        <>
+        <div className="costum__bg__image">
+          <Metadata
+            title="Yazzlinker"
+            canonical={process.env.NEXT_PUBLIC_SITE_URL}
+            openGraph={{
+              url: process.env.NEXT_PUBLIC_SITE_URL,
+              title: "Yazzlinker",
+              images: [
+                {
+                  url: "/images/seoimage.jpg",
+                  width: 800,
+                  height: 800,
+                  alt: "Create your own yazzlinker",
+                },
+              ],
+            }}
+            icon="/images/loadingscreen.gif"
+          />
           <NavbarAdmin />
           <ModalShareButton show={state.isShowModalShareButton} />
           <div className="lg:px-16">
@@ -116,7 +134,7 @@ export default function LinksPage() {
                   <div className="w-[90%] m-auto">
                     <Collapse>
                       <Collapse.Panel
-                        className="font-bold rounded-full shadow-2xl shadow-gray-500/100 text-white bg-gray-500"
+                        className="font-bold rounded-full shadow-2xl shadow-gray-500/100 text-white bg-gray-600"
                         showArrow={false}
                         header={
                           <div className="flex items-center gap-2 justify-center text-white">
@@ -156,7 +174,6 @@ export default function LinksPage() {
                                 <Input
                                   placeholder="Masukan URL"
                                   bordered={false}
-                                  size="large"
                                   // addonBefore={
                                   //   <span className="font-bold">https://</span>
                                   // }
@@ -174,9 +191,9 @@ export default function LinksPage() {
 
                     <div
                       onClick={handleClickAddHeader}
-                      className="border rounded-full cursor-pointer bg-white px-4 py-2 absolute mt-5"
+                      className="border rounded-full cursor-pointer bg-gray-600 hover:bg-gray-700 transition-all text-white px-4 py-2 absolute mt-5"
                     >
-                      <p className="m-0">
+                      <p className="flex items-center gap-2 m-0">
                         <PicCenterOutlined /> Add header
                       </p>
                     </div>
@@ -203,7 +220,7 @@ export default function LinksPage() {
               )}
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <LoadingPage />
       )}

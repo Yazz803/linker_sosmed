@@ -10,7 +10,7 @@ export default function CardLink(props) {
     });
   };
   return (
-    <div className="bg-white rounded-lg mt-4 py-6 px-4 shadow-2xl shadow-gray-500/100">
+    <div className="bg-gray-600 text-white rounded-lg mt-4 py-6 px-4 shadow-2xl shadow-gray-500/100">
       <div className="flex gap-6 items-center">
         <div className="cursor-pointer">
           <UnorderedListOutlined />
@@ -19,7 +19,7 @@ export default function CardLink(props) {
           <div className="flex justify-between">
             <div>
               <Input
-                className="p-0 font-semibold w-[50%] mb-3"
+                className="p-0 font-semibold w-[50%] mb-3 text-white"
                 size="large"
                 // suffix={<EditOutlined />}
                 bordered={false}
@@ -36,7 +36,7 @@ export default function CardLink(props) {
                 placeholder="Masukan title link"
               />
               <Input
-                className="p-0 font-semibold w-[70%]"
+                className="p-0 font-semibold w-[70%] text-white"
                 size="large"
                 // suffix={<EditOutlined />}
                 bordered={false}

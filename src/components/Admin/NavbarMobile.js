@@ -23,7 +23,7 @@ export default function NavbarMobile() {
   };
   return (
     <>
-      <div className="bg-white fixed top-0 left-0 right-0 z-50 border-b border-gray-600">
+      <div className="bg-gray-800 text-white fixed top-0 left-0 right-0 z-50 border-b border-gray-600">
         <div className="flex justify-between items-center px-4 py-2 border-b">
           <div className="logonanti font-bold text-2xl">Y</div>
           <div>

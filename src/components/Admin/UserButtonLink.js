@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function PreviewButtonLink(props) {
+export default function UserButtonLink(props) {
   const [buttonHover, setButtonHover] = useState(
     Array(props.links.length).fill(false)
   );
@@ -43,13 +43,13 @@ export default function PreviewButtonLink(props) {
   }
   return (
     <div
-      className="button-fill-rounded-lg mt-2 text-center cursor-pointer"
+      className="button-fill-rounded-lg mt-5 text-center cursor-pointer"
       style={buttonStyle}
       onMouseEnter={() => handleMouseEnter(props.index)}
       onMouseLeave={() => handleMouseLeave(props.index)}
     >
       <a href={props.document.data().link} target="_blank">
-        <button className="text-[9px] py-2 font-semibold">
+        <button className="text-base py-4 font-semibold">
           {props.document.data().title}
         </button>
       </a>

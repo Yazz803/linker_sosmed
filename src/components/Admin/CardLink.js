@@ -1,9 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { UnorderedListOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Input, Switch, Dropdown } from "antd";
+import { Input, Switch, Dropdown, Form } from "antd";
 import { updateDataDoc, deleteDataDoc } from "yazz/utils/helpers";
 
 export default function CardLink(props) {
+  const [form] = Form.useForm();
+
+  useEffect(() => form.resetFields(), [form, props.document, props.user.id]);
   const [title, setTitle] = useState(props.document.data().title);
   const [link, setLink] = useState(props.document.data().link);
 
@@ -16,7 +20,7 @@ export default function CardLink(props) {
     }, 3000);
 
     return () => clearTimeout(timeout);
-  }, [title, link, props.user.id, props.document.id]);
+  }, [title, link]);
 
   const handleChangeSwitch = (userId, docId, value) => {
     updateDataDoc(`users/${userId}/links`, docId, {
@@ -31,30 +35,41 @@ export default function CardLink(props) {
         </div>
         <div className="w-full">
           <div className="flex justify-between">
-            <div>
-              <Input
-                className="p-0 font-semibold w-[50%] mb-3 text-white"
-                size="large"
-                // suffix={<EditOutlined />}
-                bordered={false}
-                value={title}
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-                placeholder="Masukan title link"
-              />
-              <Input
-                className="p-0 font-semibold w-[70%] text-white"
-                size="large"
-                // suffix={<EditOutlined />}
-                bordered={false}
-                value={link}
-                onChange={(e) => {
-                  setLink(e.target.value);
-                }}
-                placeholder="Masukan URL"
-              />
-            </div>
+            <Form
+              form={form}
+              initialValues={{
+                link_title: props.document.data().title,
+                link_url: props.document.data().link,
+              }}
+              className="w-full"
+            >
+              <Form.Item name="link_title" className="m-0">
+                <Input
+                  className="p-0 font-semibold w-[100%] mb-3 text-white"
+                  size="large"
+                  // suffix={<EditOutlined />}
+                  bordered={false}
+                  value={props.document.data().title}
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
+                  placeholder="Masukan title link"
+                />
+              </Form.Item>
+              <Form.Item name="link_url" className="m-0">
+                <Input
+                  className="p-0 font-semibold w-[100%] text-white"
+                  size="large"
+                  // suffix={<EditOutlined />}
+                  bordered={false}
+                  value={props.document.data().link}
+                  onChange={(e) => {
+                    setLink(e.target.value);
+                  }}
+                  placeholder="Masukan URL"
+                />
+              </Form.Item>
+            </Form>
             <div>
               <Switch
                 className="bg-gray-400"

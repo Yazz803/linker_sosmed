@@ -32,6 +32,17 @@ export default function UserWebPage() {
             <>
               <div
                 style={{
+                  // backgroundImage:
+                  //   user.data().uid == "wFwx3x899eYIV8asYL81wFjhzqh1"
+                  //     ? "url('/images/loadingscreen.gif')"
+                  //     : "",
+                  backgroundImage:
+                    user.data().uid == "wFwx3x899eYIV8asYL81wFjhzqh1"
+                      ? "url('https://i0.wp.com/c.tenor.com/Kbk7TGpDvhYAAAAC/anime-live-wallpaper.gif')"
+                      : "",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
                   backgroundColor: appearance?.data().background_color,
                 }}
                 className="h-screen overflow-y-scroll p-5 lg:px-96 lg:py-10"

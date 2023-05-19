@@ -24,7 +24,10 @@ export default function AccountPage() {
   const users = GetCollection("users");
 
   const handleSubmit = (values) => {
-    let foundUser = users.find((doc) => doc.data().username == values.username);
+    let foundUser = users.find(
+      (doc) =>
+        doc.data().username.toLowerCase() == values.username.toLowerCase()
+    );
     if (foundUser) {
       message.error("Username sudah ada yang pakai");
     }

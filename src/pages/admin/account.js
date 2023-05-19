@@ -8,6 +8,7 @@ import LoadingPage from "yazz/components/Admin/LoadingPage";
 import { Form, Input, message } from "antd";
 import ModalShareButton from "yazz/components/Admin/ModalShareButton";
 import { useAppContext } from "yazz/context/AppContext";
+import Metadata from "yazz/components/Metadata";
 
 export default function AccountPage() {
   const { state } = useAppContext();
@@ -40,7 +41,24 @@ export default function AccountPage() {
   return (
     <>
       {user ? (
-        <>
+        <div className="costum__bg__image">
+          <Metadata
+            title="Yazzlinker"
+            canonical={process.env.NEXT_PUBLIC_SITE_URL}
+            openGraph={{
+              url: process.env.NEXT_PUBLIC_SITE_URL,
+              title: "Yazzlinker",
+              images: [
+                {
+                  url: "/images/seoimage.jpg",
+                  width: 800,
+                  height: 800,
+                  alt: "Create your own yazzlinker",
+                },
+              ],
+            }}
+            icon="/images/loadingscreen.gif"
+          />
           <NavbarAdmin />
           <ModalShareButton show={state.isShowModalShareButton} />
           <div className="lg:px-96 lg:pt-24 pt-36">
@@ -114,7 +132,7 @@ export default function AccountPage() {
               </div>
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <LoadingPage />
       )}

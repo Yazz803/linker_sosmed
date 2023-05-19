@@ -10,7 +10,7 @@ export default function CardHeader(props) {
     });
   };
   return (
-    <div className="bg-white rounded-lg mt-4 py-6 px-4 shadow-2xl shadow-gray-500/100">
+    <div className="bg-gray-600 text-white rounded-lg mt-4 py-6 px-4 shadow-2xl shadow-gray-500/100">
       <div className="flex gap-6 items-center">
         <div className="cursor-pointer">
           <UnorderedListOutlined />
@@ -19,7 +19,7 @@ export default function CardHeader(props) {
           <div className="flex justify-between">
             <div className="w-full">
               <Input
-                className="p-0 font-semibold w-[100%] text-center mb-3"
+                className="p-0 font-semibold w-[100%] text-center mb-3 text-white"
                 size="large"
                 // suffix={<EditOutlined />}
                 bordered={false}

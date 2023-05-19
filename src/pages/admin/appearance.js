@@ -10,6 +10,7 @@ import LoadingPage from "yazz/components/Admin/LoadingPage";
 import { useMediaQuery } from "react-responsive";
 import ModalShareButton from "yazz/components/Admin/ModalShareButton";
 import { useAppContext } from "yazz/context/AppContext";
+import Metadata from "yazz/components/Metadata";
 
 export default function AppearancePage() {
   const router = useRouter();
@@ -27,17 +28,34 @@ export default function AppearancePage() {
   return (
     <>
       {user ? (
-        <>
+        <div className="costum__bg__image">
+          <Metadata
+            title="Yazzlinker"
+            canonical={process.env.NEXT_PUBLIC_SITE_URL}
+            openGraph={{
+              url: process.env.NEXT_PUBLIC_SITE_URL,
+              title: "Yazzlinker",
+              images: [
+                {
+                  url: "/images/seoimage.jpg",
+                  width: 800,
+                  height: 800,
+                  alt: "Create your own yazzlinker",
+                },
+              ],
+            }}
+            icon="/images/loadingscreen.gif"
+          />
           <ModalShareButton show={state.isShowModalShareButton} />
           <NavbarAdmin />
           <div className="lg:px-16 px-5">
             <div className="lg:flex">
               <div className="lg:w-[60%] lg:mt-24 pb-36 lg:pt-0 lg:pb-0 pt-36">
                 <div className="lg:mr-20">
-                  <h2 className="text-center w-36 mx- text-xl font-bold bg-white shadow-lg shadow-gray-500/100 p-2 rounded-md">
+                  <h2 className="text-center mb-[-10px] w-36 mx- text-xl font-bold bg-gray-600 text-white shadow-lg shadow-gray-500/50 border-t-4 border-gray-800 p-2 rounded-t-2xl">
                     Profile
                   </h2>
-                  <div className="bg-white rounded-2xl p-5 shadow-lg shadow-gray-500/100">
+                  <div className="bg-gray-600 text-white rounded-b-2xl rounded-tr-2xl p-5 shadow-lg shadow-gray-500/100">
                     <div className="flex gap-4 items-center">
                       <img
                         src={currentUser.photoURL}
@@ -48,13 +66,17 @@ export default function AppearancePage() {
                         <button className="w-full mb-3 text-white font-semibold py-4 rounded-3xl bg-blue-700 hover:bg-blue-800 transition-all">
                           Pick an image
                         </button>
-                        <button className="w-full border font-semibold py-4 rounded-3xl bg-white hover:bg-gray-200 transition-all">
+                        <button className="w-full border font-semibold py-4 rounded-3xl text-gray-800 bg-white hover:bg-gray-200 transition-all">
                           Remove
                         </button>
                       </div>
                     </div>
                     <Form layout="vertical" className="mt-8" form={form}>
-                      <Form.Item label="Profile Title">
+                      <Form.Item
+                        label={
+                          <span className="text-white">Profile Title</span>
+                        }
+                      >
                         <Input
                           showCount
                           maxLength={30}
@@ -67,9 +89,11 @@ export default function AppearancePage() {
                           }}
                         />
                       </Form.Item>
-                      <Form.Item label="Bio">
+                      <Form.Item
+                        label={<span className="text-white">Bio</span>}
+                      >
                         <Input.TextArea
-                          showCount
+                          // showCount
                           maxLength={80}
                           onChange={(e) => {
                             updateDataDoc("users", user?.id, {
@@ -94,10 +118,10 @@ export default function AppearancePage() {
                   {appearance && (
                     <>
                       <div>
-                        <h2 className="my-5 pl-6 w-44 mx- text-xl font-bold bg-white shadow-lg shadow-gray-500/100 p-2 rounded-md">
+                        <h2 className="text-center mb-[-10px] w-36 mx- text-xl font-bold bg-gray-600 text-white shadow-lg shadow-gray-500/50 border-t-4 border-gray-800 p-2 rounded-t-2xl mt-5">
                           Background
                         </h2>
-                        <div className="bg-white rounded-2xl p-5 shadow-lg shadow-gray-500/100">
+                        <div className="bg-gray-600 text-white rounded-b-2xl rounded-tr-2xl p-5 shadow-lg shadow-gray-500/100">
                           <h4 className="font-semibold ">Color</h4>
                           <div className="flex gap-8">
                             <ColorPicker
@@ -113,7 +137,7 @@ export default function AppearancePage() {
                                 )
                               }
                             />
-                            <div className="bg-gray-200 w-[50%] rounded-md p-2">
+                            <div className="bg-gray-200 w-[50%] rounded-md p-2 text-gray-700">
                               <p className="m-0 text-sm mb-1">Color</p>
                               <p className="uppercase m-0 font-semibold">
                                 {appearance.data().background_color}
@@ -123,10 +147,10 @@ export default function AppearancePage() {
                         </div>
                       </div>
                       <div>
-                        <h2 className="my-5 pl-6 w-44 text-xl font-bold bg-white shadow-lg shadow-gray-500/100 p-2 rounded-md">
+                        <h2 className="text-center mb-[-10px] w-36 mx- text-xl font-bold bg-gray-600 text-white shadow-lg shadow-gray-500/50 border-t-4 border-gray-800 p-2 rounded-t-2xl mt-5">
                           Buttons
                         </h2>
-                        <div className="bg-white rounded-2xl p-5 shadow-lg shadow-gray-500/100">
+                        <div className="bg-gray-600 text-white rounded-b-2xl rounded-tr-2xl p-5 shadow-lg shadow-gray-500/100">
                           <h4 className="font-semibold ">Button Color</h4>
                           <div className="flex gap-8">
                             <ColorPicker
@@ -142,7 +166,7 @@ export default function AppearancePage() {
                                 )
                               }
                             />
-                            <div className="bg-gray-200 w-[50%] rounded-md p-2">
+                            <div className="bg-gray-200 w-[50%] rounded-md p-2 text-gray-700">
                               <p className="m-0 text-sm mb-1">Button Color</p>
                               <p className="uppercase m-0 font-semibold">
                                 {appearance.data().button_color}
@@ -166,7 +190,7 @@ export default function AppearancePage() {
                                 )
                               }
                             />
-                            <div className="bg-gray-200 w-[50%] rounded-md p-2">
+                            <div className="bg-gray-200 w-[50%] rounded-md p-2 text-gray-700">
                               <p className="m-0 text-sm mb-1">
                                 Button Font Color
                               </p>
@@ -178,10 +202,10 @@ export default function AppearancePage() {
                         </div>
                       </div>
                       <div>
-                        <h2 className="my-5 pl-6 w-44 text-xl font-bold bg-white shadow-lg shadow-gray-500/100 p-2 rounded-md">
+                        <h2 className="text-center mb-[-10px] w-36 mx- text-xl font-bold bg-gray-600 text-white shadow-lg shadow-gray-500/50 border-t-4 border-gray-800 p-2 rounded-t-2xl mt-5">
                           Fonts
                         </h2>
-                        <div className="bg-white rounded-2xl p-5 shadow-lg shadow-gray-500/100">
+                        <div className="bg-gray-600 text-white rounded-b-2xl rounded-tr-2xl p-5 shadow-lg shadow-gray-500/100">
                           <h4 className="font-semibold ">Font Color</h4>
                           <div className="flex gap-8">
                             <ColorPicker
@@ -197,7 +221,7 @@ export default function AppearancePage() {
                                 )
                               }
                             />
-                            <div className="bg-gray-200 w-[50%] rounded-md p-2">
+                            <div className="bg-gray-200 w-[50%] rounded-md p-2 text-gray-700">
                               <p className="m-0 text-sm mb-1">Font Color</p>
                               <p className="uppercase m-0 font-semibold">
                                 {appearance.data().font_color}
@@ -217,7 +241,7 @@ export default function AppearancePage() {
               )}
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <LoadingPage />
       )}

@@ -24,7 +24,12 @@ export default function Navbar() {
   const items = [
     {
       label: (
-        <div className="flex gap-2 pl-2 pr-24 py-4">
+        <div
+          className="flex gap-2 pl-2 pr-24 py-4"
+          onClick={() => {
+            router.push("/admin/account");
+          }}
+        >
           <div>
             <img
               src={user?.data().photoURL}
@@ -48,13 +53,13 @@ export default function Navbar() {
     },
   ];
   return (
-    <div className="flex justify-between border-b-2 px-10 py-2 bg-white fixed top-0 right-0 left-0 z-50">
+    <div className="flex justify-between border-b-2 px-10 py-2 bg-gray-800 text-white fixed top-0 right-0 left-0 z-50">
       <div className="flex items-center">
         <h3
           onClick={() => {
             router.push("/admin");
           }}
-          className="cursor-pointer flex items-center gap-2 hover:bg-gray-100 transition-all font-semibold px-4 py-2 rounded-md m-0"
+          className="cursor-pointer flex items-center gap-2 hover:bg-gray-600 transition-all font-semibold px-4 py-2 rounded-md m-0"
         >
           <PicCenterOutlined /> Links
         </h3>
@@ -62,7 +67,7 @@ export default function Navbar() {
           onClick={() => {
             router.push("/admin/appearance");
           }}
-          className="cursor-pointer flex items-center gap-2 hover:bg-gray-100 transition-all font-semibold px-4 py-2 rounded-md m-0"
+          className="cursor-pointer flex items-center gap-2 hover:bg-gray-600 transition-all font-semibold px-4 py-2 rounded-md m-0"
         >
           <PieChartOutlined /> Appearance
         </h3>

@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { UnorderedListOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Input, Switch, Dropdown } from "antd";
 import { updateDataDoc, deleteDataDoc } from "yazz/utils/helpers";
 
 export default function CardLink(props) {
+  const [title, setTitle] = useState(props.document.data().title);
+  const [link, setLink] = useState(props.document.data().link);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      updateDataDoc(`users/${props.user.id}/links`, props.document.id, {
+        title: title,
+        link: link,
+      });
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [title, link, props.user.id, props.document.id]);
+
   const handleChangeSwitch = (userId, docId, value) => {
     updateDataDoc(`users/${userId}/links`, docId, {
       is_active: value,
@@ -23,15 +37,9 @@ export default function CardLink(props) {
                 size="large"
                 // suffix={<EditOutlined />}
                 bordered={false}
-                value={props.document.data().title}
+                value={title}
                 onChange={(e) => {
-                  updateDataDoc(
-                    `users/${props.user.id}/links`,
-                    props.document.id,
-                    {
-                      title: e.target.value,
-                    }
-                  );
+                  setTitle(e.target.value);
                 }}
                 placeholder="Masukan title link"
               />
@@ -40,15 +48,9 @@ export default function CardLink(props) {
                 size="large"
                 // suffix={<EditOutlined />}
                 bordered={false}
-                value={props.document.data().link}
+                value={link}
                 onChange={(e) => {
-                  updateDataDoc(
-                    `users/${props.user.id}/links`,
-                    props.document.id,
-                    {
-                      link: e.target.value,
-                    }
-                  );
+                  setLink(e.target.value);
                 }}
                 placeholder="Masukan URL"
               />

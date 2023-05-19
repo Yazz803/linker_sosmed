@@ -18,25 +18,25 @@ export default function LoginPage() {
 
   return (
     <>
+      <Metadata
+        title="Yazzlinker"
+        canonical={process.env.NEXT_PUBLIC_SITE_URL}
+        openGraph={{
+          url: process.env.NEXT_PUBLIC_SITE_URL,
+          title: "Yazzlinker",
+          images: [
+            {
+              url: "/images/seoimage.jpg",
+              width: 800,
+              height: 800,
+              alt: "Create your own yazzlinker",
+            },
+          ],
+        }}
+        icon="/images/loadingscreen.gif"
+      />
       {!currentUser && (
         <div className="flex justify-center items-center h-screen login__page costum__bg__image">
-          <Metadata
-            title="Yazzlinker"
-            canonical={process.env.NEXT_PUBLIC_SITE_URL}
-            openGraph={{
-              url: process.env.NEXT_PUBLIC_SITE_URL,
-              title: "Yazzlinker",
-              images: [
-                {
-                  url: "/images/seoimage.jpg",
-                  width: 800,
-                  height: 800,
-                  alt: "Create your own yazzlinker",
-                },
-              ],
-            }}
-            icon="/images/loadingscreen.gif"
-          />
           <Form
             name="normal_login"
             className="login__form border lg:w-1/3 p-8 rounded-lg shadow-lg"

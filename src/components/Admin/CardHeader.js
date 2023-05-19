@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { UnorderedListOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Input, Switch, Dropdown } from "antd";
 import { updateDataDoc, deleteDataDoc } from "yazz/utils/helpers";
 
 export default function CardHeader(props) {
+  const [title, setTitle] = useState(props.document.data().title);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      updateDataDoc(`users/${props.user.id}/links`, props.document.id, {
+        title: title,
+      });
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [title, props.user.id, props.document.id]);
+
   const handleChangeSwitch = (userId, docId, value) => {
     updateDataDoc(`users/${userId}/links`, docId, {
       is_active: value,
@@ -23,15 +35,9 @@ export default function CardHeader(props) {
                 size="large"
                 // suffix={<EditOutlined />}
                 bordered={false}
-                value={props.document.data().title}
+                value={title}
                 onChange={(e) => {
-                  updateDataDoc(
-                    `users/${props.user.id}/links`,
-                    props.document.id,
-                    {
-                      title: e.target.value,
-                    }
-                  );
+                  setTitle(e.target.value);
                 }}
                 maxLength={35}
                 placeholder="Masukan title link"

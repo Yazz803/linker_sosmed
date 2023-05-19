@@ -101,7 +101,7 @@ export default function AccountPage() {
               <div>
                 <p>Accounts action for {user.data().username}</p>
                 <div className="bg-gray-200 rounded-md px-4 py-2">
-                  <p className="text-sm m-0 ml-2 font-semibold">Name</p>
+                  <p className="text-sm m-0 ml-2 font-semibold">Username</p>
                   <Form
                     form={form}
                     onFinish={(values) => handleSubmit(values)}

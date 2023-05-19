@@ -67,7 +67,7 @@ export default function LinksPage() {
 
   const onSubmit = (values) => {
     if (links.length >= 10)
-      return message.warning("Link sudah mencapai batas maksimal");
+      return message.warning("Link/Header sudah mencapai batas maksimal");
     let data = {
       link: values.link_url,
       title: "Edit your title",
@@ -89,7 +89,7 @@ export default function LinksPage() {
 
   const handleClickAddHeader = () => {
     if (links.length >= 10)
-      return message.warning("Link sudah mencapai batas maksimal");
+      return message.warning("Link/Header sudah mencapai batas maksimal");
     let data = {
       link: "",
       title: "Headline Title",
@@ -210,7 +210,7 @@ export default function LinksPage() {
                           <CardLink document={document} user={user} key={i} />
                         )}
                         {document.data().type == "header" && (
-                          <CardHeader document={document} user={user} key={i} />
+                          <CardHeader links={links} document={document} user={user} key={i} />
                         )}
                       </>
                     ))}

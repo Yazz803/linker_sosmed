@@ -10,7 +10,7 @@ export default function NavbarShareButton() {
       onClick={() => {
         dispatch({ type: PARAMS.SET_MODAL_SHARE_BUTTON, value: true });
       }}
-      className="cursor-pointer flex items-center gap-2 hover:bg-gray-700 transition-all border font-semibold px-4 py-2 rounded-md m-0"
+      className="cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-700 transition-all border font-semibold px-4 py-2 rounded-md m-0"
     >
       <ShareAltOutlined /> Share
     </h3>

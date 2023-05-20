@@ -18,7 +18,9 @@ export default function UserWebPage() {
   const appearance = GetSubCollection(
     `users/${user?.id}/appearance_settings`
   )[0];
-  const links = GetSubCollection(`users/${user?.id}/links`);
+  const links = GetSubCollection(`users/${user?.id}/links`, {
+    orderBy: ["list_number", "asc"],
+  });
 
   const handleOpenModalShare = () => {
     dispatch({ type: PARAMS.SET_MODAL_SHARE_BUTTON_USER, value: true });

@@ -5,7 +5,12 @@ import { useRouter } from "next/router";
 import { useAuth } from "yazz/context/AuthContext";
 import { Collapse, Form, Input, message } from "antd";
 import PreviewWeb from "yazz/components/Admin/PreviewWeb";
-import { GetSubCollection, addDataDoc, getUser } from "yazz/utils/helpers";
+import {
+  GetSubCollection,
+  addDataDoc,
+  getUser,
+  updateDataDoc,
+} from "yazz/utils/helpers";
 import { ArrowDownOutlined, PicCenterOutlined } from "@ant-design/icons";
 import { serverTimestamp } from "firebase/firestore";
 import LoadingPage from "yazz/components/Admin/LoadingPage";
@@ -15,6 +20,9 @@ import { useMediaQuery } from "react-responsive";
 import ModalShareButton from "yazz/components/Admin/ModalShareButton";
 import { useAppContext } from "yazz/context/AppContext";
 import Metadata from "yazz/components/Metadata";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = useState(false);
@@ -57,7 +65,9 @@ export default function LinksPage() {
 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
-  const links = GetSubCollection(`users/${user?.id}/links`);
+  const links = GetSubCollection(`users/${user?.id}/links`, {
+    orderBy: ["list_number", "asc"],
+  });
   // const getLinkListNumber = GetSubCollection(`users/${user?.id}/links`, {
   //   orderBy: ["list_number", "desc"],
   //   limit: 1,
@@ -74,7 +84,7 @@ export default function LinksPage() {
       type: "link",
       img: "",
       is_active: true,
-      // list_number: lastListNumber ? lastListNumber + 1 : 1,
+      list_number: 0,
       createdAt: serverTimestamp(),
     };
     addDataDoc(`users/${user?.id}/links`, data)
@@ -96,7 +106,7 @@ export default function LinksPage() {
       type: "header",
       img: "",
       is_active: true,
-      // list_number: lastListNumber ? lastListNumber + 1 : 1,
+      list_number: 0,
       createdAt: serverTimestamp(),
     };
     addDataDoc(`users/${user?.id}/links`, data)
@@ -106,6 +116,22 @@ export default function LinksPage() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  // Draggable
+  let handleDragBackendDnd = isMobile ? TouchBackend : HTML5Backend;
+  const moveCard = (dragIndex, hoverIndex) => {
+    console.log({ dragIndex });
+    console.log({ hoverIndex });
+    const dragCard = links[dragIndex];
+    const newLinks = [...links];
+    newLinks.splice(dragIndex, 1);
+    newLinks.splice(hoverIndex, 0, dragCard);
+    newLinks.forEach((link, i) => {
+      updateDataDoc(`users/${user?.id}/links`, link.id, {
+        list_number: i + 1,
+      });
+    });
   };
 
   return (
@@ -204,16 +230,34 @@ export default function LinksPage() {
 
                     <div className="mt-16"></div>
 
-                    {links.map((document, i) => (
-                      <>
-                        {document.data().type == "link" && (
-                          <CardLink document={document} user={user} key={i} />
-                        )}
-                        {document.data().type == "header" && (
-                          <CardHeader links={links} document={document} user={user} key={i} />
-                        )}
-                      </>
-                    ))}
+                    <DndProvider backend={handleDragBackendDnd}>
+                      <div>
+                        {links.map((document, i) => (
+                          <>
+                            {document.data().type == "link" && (
+                              <CardLink
+                                links={links}
+                                document={document}
+                                user={user}
+                                moveCard={moveCard}
+                                index={i}
+                                key={i}
+                              />
+                            )}
+                            {document.data().type == "header" && (
+                              <CardHeader
+                                links={links}
+                                document={document}
+                                user={user}
+                                moveCard={moveCard}
+                                index={i}
+                                key={i}
+                              />
+                            )}
+                          </>
+                        ))}
+                      </div>
+                    </DndProvider>
                   </div>
                 </div>
               </div>

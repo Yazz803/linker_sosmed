@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { UnorderedListOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Input, Switch, Dropdown, Form } from "antd";
 import { updateDataDoc, deleteDataDoc } from "yazz/utils/helpers";
+import { useDrag, useDrop } from "react-dnd";
+import { ItemTypes } from "yazz/constants/constants";
 
 export default function CardHeader(props) {
   const [title, setTitle] = useState(props.document.data().title);
@@ -11,10 +13,10 @@ export default function CardHeader(props) {
   useEffect(() => form.resetFields(), [form, props.document, props.user.id]);
 
   useEffect(() => {
-    // let foundDuplicate = props.links.find((document) => {
-    //   title == document.data().title;
-    // });
-    // if (foundDuplicate) return;
+    let foundDuplicate = props.links.find((document) => {
+      title == document.data().title;
+    });
+    if (foundDuplicate) return;
     const timeout = setTimeout(() => {
       updateDataDoc(`users/${props.user.id}/links`, props.document.id, {
         title: title,
@@ -30,10 +32,42 @@ export default function CardHeader(props) {
     });
   };
 
+  // Draggable
+  const cardRef = useRef(null);
+  const [{ scale }, drag] = useDrag({
+    type: ItemTypes.CARD,
+    item: { type: ItemTypes.CARD, index: props.index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+      scale: monitor.isDragging() ? "1.05" : "1",
+    }),
+  });
+
+  const [, drop] = useDrop({
+    accept: ItemTypes.CARD,
+    hover(item) {
+      if (!cardRef.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = props.index;
+      if (dragIndex == hoverIndex) {
+        return;
+      }
+      props.moveCard(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+  });
+
+  drag(drop(cardRef));
+
   return (
-    <div className="bg-gray-600 text-white rounded-lg mt-4 py-6 px-4 shadow-2xl shadow-gray-500/100">
+    <div
+      className="bg-gray-600 transition-all text-white rounded-lg mt-4 py-6 pr-4 shadow-2xl shadow-gray-500/100"
+      style={{ scale }}
+    >
       <div className="flex gap-6 items-center">
-        <div className="cursor-pointer">
+        <div ref={cardRef} className="cursor-pointer pl-4 py-6">
           <UnorderedListOutlined />
         </div>
         <div className="w-full">

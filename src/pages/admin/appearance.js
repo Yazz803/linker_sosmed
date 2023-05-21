@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import NavbarAdmin from "yazz/components/Admin/NavbarAdmin";
 import { useRouter } from "next/router";
 import { useAuth } from "yazz/context/AuthContext";
-import { Alert, ColorPicker, Form, Input } from "antd";
+import { Alert, ColorPicker, Form, Input, Spin, Upload, message } from "antd";
 import PreviewWeb from "yazz/components/Admin/PreviewWeb";
 import { getAppearance, getUser, updateDataDoc } from "yazz/utils/helpers";
 import LoadingPage from "yazz/components/Admin/LoadingPage";
@@ -11,8 +11,19 @@ import { useMediaQuery } from "react-responsive";
 import ModalShareButton from "yazz/components/Admin/ModalShareButton";
 import { useAppContext } from "yazz/context/AppContext";
 import Metadata from "yazz/components/Metadata";
+import ImgCrop from "antd-img-crop";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "@firebase/storage";
+import { storage } from "yazz/config/firebase";
+import { UploadOutlined } from "@ant-design/icons";
 
 export default function AppearancePage() {
+  const [loadingUploadPP, setLoadingUploadPP] = useState(false);
+  const [loadingUploadBg, setLoadingUploadBg] = useState(false);
   const router = useRouter();
   const { currentUser } = useAuth();
   useEffect(() => {
@@ -24,6 +35,66 @@ export default function AppearancePage() {
   const appearance = getAppearance(user?.id);
 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
+  const handleUploadImagePP = async (file, user) => {
+    setLoadingUploadPP(true);
+    try {
+      if (file.size > 2_200_000)
+        return message.warning("Size img tidak boleh lebih dari 2MB");
+      const storageRef = ref(storage, file.name);
+      const snapshot = await uploadBytes(storageRef, file);
+      const imageUrl = await getDownloadURL(snapshot.ref);
+
+      if (user.data().img_name) {
+        const oldImgRef = ref(storage, user.data().img_name);
+        await deleteObject(oldImgRef);
+      }
+
+      updateDataDoc(`users`, user.id, {
+        photoURL: imageUrl,
+        img_name: file.name,
+      }).then(() => {
+        message.success("Photo Profile has been updated!");
+        setLoadingUploadPP(false);
+      });
+      // console.log({ imageUrl });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      message.error("Image upload failed.");
+      setLoadingUploadPP(false);
+    }
+  };
+
+  const handleUploadImageBackground = async (file, user, appearance) => {
+    setLoadingUploadBg(true);
+    try {
+      if (file.size > 4_194_304) {
+        setLoadingUploadBg(false);
+        return message.warning("Size img tidak boleh lebih dari 4MB");
+      }
+      const storageRef = ref(storage, file.name);
+      const snapshot = await uploadBytes(storageRef, file);
+      const imageUrl = await getDownloadURL(snapshot.ref);
+
+      if (appearance.data().img_name) {
+        const oldImgRef = ref(storage, appearance.data().img_name);
+        await deleteObject(oldImgRef);
+      }
+
+      updateDataDoc(`users/${user.id}/appearance_settings`, appearance.id, {
+        background_image: imageUrl,
+        img_name: file.name,
+      }).then(() => {
+        message.success("Background Image has been updated!");
+        setLoadingUploadBg(false);
+      });
+      // console.log({ imageUrl });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      message.error("Image upload failed.");
+      setLoadingUploadBg(false);
+    }
+  };
 
   return (
     <>
@@ -56,55 +127,83 @@ export default function AppearancePage() {
                     Profile
                   </h2>
                   <div className="bg-gray-600 text-white rounded-b-2xl rounded-tr-2xl p-5 shadow-lg shadow-gray-500/100">
-                    <div className="flex gap-4 items-center">
-                      <img
-                        src={currentUser.photoURL}
-                        className="rounded-full w-24"
-                        alt="Photo Profile"
-                      />
-                      <div className="w-full">
-                        <button className="w-full mb-3 text-white font-semibold py-4 rounded-3xl bg-blue-700 hover:bg-blue-800 transition-all">
-                          Pick an image
-                        </button>
-                        <button className="w-full border font-semibold py-4 rounded-3xl text-gray-800 bg-white hover:bg-gray-200 transition-all">
-                          Remove
-                        </button>
+                    <div className="w-full">
+                      <div className="lg:flex gap-10 items-center">
+                        <div className="flex flex-col gap-4 items-center lg:w-[30%]">
+                          <Spin
+                            spinning={loadingUploadPP}
+                            delay={500}
+                            size="large"
+                            wrapperClassName="bg-black rounded-full"
+                          >
+                            <div className="relative rounded-full border-2 border-slate-500">
+                              <a href={user?.data().photoURL} target="_blank">
+                                <img
+                                  src={user?.data().photoURL}
+                                  className="rounded-full w-24 cursor-pointer overflow-hidden transition-all"
+                                  alt="Photo Profile"
+                                />
+                              </a>
+                            </div>
+                          </Spin>
+                          <ImgCrop rotationSlider>
+                            <Upload
+                              beforeUpload={(file) => {
+                                const fileName = `${Date.now()}_${file.name}`;
+                                const newFile = new File([file], fileName, {
+                                  type: file.type,
+                                });
+                                handleUploadImagePP(newFile, user);
+                                return false;
+                              }}
+                              showUploadList={false}
+                            >
+                              <button className="w-full text-white font-semibold px-5 py-2 rounded-3xl bg-slate-800 hover:bg-slate-900 transition-all">
+                                Pick an image
+                              </button>
+                            </Upload>
+                          </ImgCrop>
+                        </div>
+                        <Form
+                          layout="vertical"
+                          className="mt-8 w-full"
+                          form={form}
+                        >
+                          <Form.Item
+                            label={
+                              <span className="text-white">Profile Title</span>
+                            }
+                          >
+                            <Input
+                              showCount
+                              maxLength={30}
+                              defaultValue={user?.data().profile_title}
+                              placeholder="Masukan Profile Title"
+                              onChange={(e) => {
+                                updateDataDoc("users", user?.id, {
+                                  profile_title: e.target.value,
+                                });
+                              }}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label={<span className="text-white">Bio</span>}
+                          >
+                            <Input.TextArea
+                              // showCount
+                              maxLength={80}
+                              onChange={(e) => {
+                                updateDataDoc("users", user?.id, {
+                                  bio: e.target.value,
+                                });
+                              }}
+                              defaultValue={user?.data().bio}
+                              placeholder="Masukan Bio"
+                            />
+                          </Form.Item>
+                        </Form>
                       </div>
                     </div>
-                    <Form layout="vertical" className="mt-8" form={form}>
-                      <Form.Item
-                        label={
-                          <span className="text-white">Profile Title</span>
-                        }
-                      >
-                        <Input
-                          showCount
-                          maxLength={30}
-                          defaultValue={user?.data().profile_title}
-                          placeholder="Masukan Profile Title"
-                          onChange={(e) => {
-                            updateDataDoc("users", user?.id, {
-                              profile_title: e.target.value,
-                            });
-                          }}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        label={<span className="text-white">Bio</span>}
-                      >
-                        <Input.TextArea
-                          // showCount
-                          maxLength={80}
-                          onChange={(e) => {
-                            updateDataDoc("users", user?.id, {
-                              bio: e.target.value,
-                            });
-                          }}
-                          defaultValue={user?.data().bio}
-                          placeholder="Masukan Bio"
-                        />
-                      </Form.Item>
-                    </Form>
                   </div>
                   <Alert
                     message={
@@ -133,8 +232,20 @@ export default function AppearancePage() {
                                   appearance.id,
                                   {
                                     background_color: value.toHexString(),
+                                    background_image: "none",
+                                    img_name: "",
                                   }
-                                )
+                                ).then(async () => {
+                                  if (
+                                    appearance.data().background_image != "none"
+                                  ) {
+                                    const olgImgBg = ref(
+                                      storage,
+                                      appearance.data().img_name
+                                    );
+                                    await deleteObject(olgImgBg);
+                                  }
+                                })
                               }
                             />
                             <div className="bg-gray-200 w-[50%] rounded-md p-2 text-gray-700">
@@ -143,6 +254,54 @@ export default function AppearancePage() {
                                 {appearance.data().background_color}
                               </p>
                             </div>
+                          </div>
+                          <small className="text-red-500 font-semibold">
+                            Mengganti Background Color akan menghapus Background
+                            Image!
+                          </small>
+                          <div className="mt-7 text-white">
+                            <h4 className="font-semibold ">
+                              Costum Background Image
+                            </h4>
+                            <Spin
+                              spinning={loadingUploadBg}
+                              delay={500}
+                              size="large"
+                            >
+                              <ImgCrop
+                                rotationSlider
+                                aspectSlider
+                                aspect={1.5 / 1}
+                              >
+                                <Upload.Dragger
+                                  beforeUpload={(file) => {
+                                    const fileName = `${Date.now()}_${
+                                      file.name
+                                    }`;
+                                    const newFile = new File([file], fileName, {
+                                      type: file.type,
+                                    });
+                                    handleUploadImageBackground(
+                                      newFile,
+                                      user,
+                                      appearance
+                                    );
+                                    return false;
+                                  }}
+                                  showUploadList={false}
+                                >
+                                  <p className="text-5xl mb-3">
+                                    <UploadOutlined className="text-white" />
+                                  </p>
+                                  <p className="text-white mb-1 font-semibold">
+                                    Click or drag Image to this area to upload
+                                  </p>
+                                  <p className="text-gray-300">
+                                    Maksimal ukuran gambar adalah 4MB
+                                  </p>
+                                </Upload.Dragger>
+                              </ImgCrop>
+                            </Spin>
                           </div>
                         </div>
                       </div>

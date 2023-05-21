@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@firebase/storage": "^0.11.2",
     "antd": "^5.5.0",
+    "antd-img-crop": "^4.12.2",
     "autoprefixer": "10.4.14",
     "dayjs": "^1.11.7",
     "eslint": "8.40.0",

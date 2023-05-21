@@ -17,10 +17,22 @@
 }
 
 @layer base {
-  
+
 }
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+.ant-spin-nested-loading .ant-spin-container::after {
+  background-color: transparent;
+}
+
+.ant-spin .ant-spin-dot-item {
+  background-color: white;
+}
+
+.ant-btn-primary {
+  background-color: #1677ff !important;
+}
 
 .ant-float-btn-default .ant-float-btn-body {
   background-color: gray;

@@ -27,6 +27,10 @@ export default function PreviewWeb() {
         <div
           className={`screen`}
           style={{
+            backgroundImage: `url("${appearance?.data().background_image}")`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
             backgroundColor: appearance?.data().background_color,
             color: appearance?.data().font_color,
             fontFamily: `'${appearance?.data().font_family}', sans-serif`,
@@ -67,10 +71,24 @@ export default function PreviewWeb() {
               className="w-14 rounded-full"
               alt="Photo Profile"
             />
-            <h3 className="font-semibold text-[.8rem] mt-3">
+            <h3
+              className="font-semibold backdrop-blur-sm px-1 py-[2px] rounded-sm text-[.8rem] mt-3"
+              style={{
+                backgroundColor: `${appearance?.data().button_color}90`,
+                color: appearance?.data().font_color,
+              }}
+            >
               {user.data().profile_title}
             </h3>
-            <small className="text-[9px]">{user.data().bio}</small>
+            <small
+              className="text-[9px] backdrop-blur-sm px-1 py-[2px] rounded-sm"
+              style={{
+                backgroundColor: `${appearance?.data().button_color}90`,
+                color: appearance?.data().font_color,
+              }}
+            >
+              {user.data().bio}
+            </small>
           </header>
           <section className="mt-4">
             {links.map((document, i) => {

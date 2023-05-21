@@ -38,10 +38,9 @@ export default function UserWebPage() {
                   //   user.data().uid == "wFwx3x899eYIV8asYL81wFjhzqh1"
                   //     ? "url('/images/loadingscreen.gif')"
                   //     : "",
-                  backgroundImage:
-                    user.data().uid == "wFwx3x899eYIV8asYL81wFjhzqh1"
-                      ? "url('https://i0.wp.com/c.tenor.com/Kbk7TGpDvhYAAAAC/anime-live-wallpaper.gif')"
-                      : "",
+                  backgroundImage: `url("${
+                    appearance?.data().background_image
+                  }")`,
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
@@ -53,7 +52,7 @@ export default function UserWebPage() {
                   show={state.isShowModalShareButtonUser}
                   user={user}
                 />
-                <nav className="backdrop-blur-md border rounded-full py-2 lg:mx-96 px-4 fixed lg:left-0 lg:right-0 left-5 right-5 bg-[#ffffff4d]">
+                <nav className="backdrop-blur-md border rounded-full z-50 py-2 lg:mx-96 px-4 fixed lg:left-0 lg:right-0 left-5 right-5 bg-[#ffffff4d]">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                       <img
@@ -129,16 +128,18 @@ export default function UserWebPage() {
                     alt="Photo Profile"
                   />
                   <h3
-                    className="font-semibold text-2xl mt-3"
+                    className="font-semibold px-3 py-1 text-2xl mt-3 backdrop-blur-sm rounded-md"
                     style={{
+                      backgroundColor: `${appearance.data().button_color}90`,
                       color: appearance.data().font_color,
                     }}
                   >
                     {user.data().profile_title}
                   </h3>
                   <small
-                    className="text-base font-medium"
+                    className="text-base font-medium px-2 py-1 backdrop-blur-sm rounded-md"
                     style={{
+                      backgroundColor: `${appearance.data().button_color}90`,
                       color: appearance.data().font_color,
                     }}
                   >

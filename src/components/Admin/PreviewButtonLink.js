@@ -26,7 +26,7 @@ export default function PreviewButtonLink(props) {
     buttonStyle = {
       backgroundColor: !buttonHover[props.index]
         ? props.appearance?.data().button_color
-        : "#ffffff00",
+        : "#ffffff15",
       border: `1px solid ${props.appearance?.data().button_color}`,
       color: !buttonHover[props.index]
         ? props.appearance?.data().button_font_color
@@ -43,7 +43,7 @@ export default function PreviewButtonLink(props) {
   }
   return (
     <div
-      className="button-fill-rounded-lg mt-2 text-center cursor-pointer"
+      className="button-fill-rounded-lg mt-2 text-center cursor-pointer backdrop-blur-sm"
       style={buttonStyle}
       onMouseEnter={() => handleMouseEnter(props.index)}
       onMouseLeave={() => handleMouseLeave(props.index)}

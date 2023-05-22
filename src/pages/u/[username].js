@@ -6,6 +6,7 @@ import ModalShareButtonUser from "yazz/components/Admin/ModalShareButtonUser";
 import UserButtonLink from "yazz/components/Admin/UserButtonLink";
 import UserHeadline from "yazz/components/Admin/UserHeadline";
 import Metadata from "yazz/components/Metadata";
+import Watermark from "yazz/components/Watermark";
 import { PARAMS } from "yazz/constants/constants";
 import { useAppContext } from "yazz/context/AppContext";
 import { GetSubCollection, getUser } from "yazz/utils/helpers";
@@ -34,10 +35,6 @@ export default function UserWebPage() {
             <>
               <div
                 style={{
-                  // backgroundImage:
-                  //   user.data().uid == "wFwx3x899eYIV8asYL81wFjhzqh1"
-                  //     ? "url('/images/loadingscreen.gif')"
-                  //     : "",
                   backgroundImage: `url("${
                     appearance?.data().background_image
                   }")`,
@@ -46,13 +43,13 @@ export default function UserWebPage() {
                   backgroundPosition: "center",
                   backgroundColor: appearance?.data().background_color,
                 }}
-                className="h-screen overflow-y-scroll p-5 lg:px-96 lg:py-10"
+                className="h-screen overflow-y-scroll p-5 lg:px-80 lg:py-10"
               >
                 <ModalShareButtonUser
                   show={state.isShowModalShareButtonUser}
                   user={user}
                 />
-                <nav className="backdrop-blur-md border rounded-full z-50 py-2 lg:mx-96 px-4 fixed lg:left-0 lg:right-0 left-5 right-5 bg-[#ffffff4d]">
+                <nav className="backdrop-blur-md border rounded-full z-50 py-2 lg:mx-80 px-4 fixed lg:-left-10 lg:-right-6 left-5 right-5 bg-[#ffffff4d]">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                       <img
@@ -77,47 +74,6 @@ export default function UserWebPage() {
                       >
                         <DashOutlined className="text-white" />
                       </div>
-                      {/* <button className="bg-gray-200 hover:bg-gray-300 transition-all rounded-full px-3 py-1">
-                        <a
-                          href={`https://twitter.com/intent/tweet?text=Check%20out%20${
-                            user.data().username
-                          }%20on%20Yazz%20https://yazz.vercel.app/u/${
-                            user.data().username
-                          }`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <TwitterOutlined />
-                        </a>
-                      </button>
-                      <button className="bg-gray-200 hover:bg-gray-300 transition-all rounded-full px-3 py-1">
-                        <a
-                          href={`https://www.facebook.com/sharer/sharer.php?u=https://yazz.vercel.app/u/${
-                            user.data().username
-                          }`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <FacebookOutlined />
-                        </a>
-                      </button>
-                      <button className="bg-gray-200 hover:bg-gray-300 transition-all rounded-full px-3 py-1">
-                        <a
-                          href={`https://www.linkedin.com/shareArticle?mini=true&url=https://yazz.vercel.app/u/${
-                            user.data().username
-                          }&title=Check%20out%20${
-                            user.data().username
-                          }%20on%20Yazz&summary=Check%20out%20${
-                            user.data().username
-                          }%20on%20Yazz&source=https://yazz.vercel.app/u/${
-                            user.data().username
-                          }`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <LinkedinOutlined />
-                        </a>
-                      </button> */}
                     </div>
                   </div>
                 </nav>
@@ -128,9 +84,9 @@ export default function UserWebPage() {
                     alt="Photo Profile"
                   />
                   <h3
-                    className="font-semibold px-3 py-1 text-2xl mt-3 backdrop-blur-sm rounded-md"
+                    className="font-semibold px-3 py-1 text-2xl mt-3 mb-0 backdrop-blur-sm rounded-md"
                     style={{
-                      backgroundColor: `${appearance.data().button_color}90`,
+                      backgroundColor: `${appearance.data().button_color}100`,
                       color: appearance.data().font_color,
                     }}
                   >
@@ -139,7 +95,7 @@ export default function UserWebPage() {
                   <small
                     className="text-base font-medium px-2 py-1 backdrop-blur-sm rounded-md"
                     style={{
-                      backgroundColor: `${appearance.data().button_color}90`,
+                      backgroundColor: `${appearance.data().button_color}100`,
                       color: appearance.data().font_color,
                     }}
                   >
@@ -171,6 +127,9 @@ export default function UserWebPage() {
                     }
                   }
                 })}
+                <div className="mt-12 lg:w-[60%] m-auto">
+                  <Watermark appearance={appearance} />
+                </div>
               </div>
             </>
           )}

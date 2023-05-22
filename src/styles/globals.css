@@ -26,6 +26,7 @@
   background-color: transparent;
 }
 
+
 .ant-spin .ant-spin-dot-item {
   background-color: white;
 }
@@ -69,7 +70,7 @@ body {
 }
 
 .login__page {
-  color: white !important;
+  color: #ffffff !important;
 }
 
 .login__form {

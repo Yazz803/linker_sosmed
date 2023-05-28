@@ -8,8 +8,8 @@ import { ItemTypes } from "yazz/constants/constants";
 import ButtonDeleteCard from "./ButtonDeleteCard";
 
 export default function CardLink(props) {
-  const handleOnChange = (field, value) => {
-    if (value.length > 20) return;
+  const handleOnChange = (field, value, maxLength = 20) => {
+    if (value.length > maxLength) return;
     updateDataDoc(`users/${props.user.id}/links`, props.document.id, {
       [field]: value,
       is_active: true,
@@ -83,7 +83,7 @@ export default function CardLink(props) {
                 bordered={false}
                 value={props.document.data().link}
                 onChange={(e) => {
-                  handleOnChange("link", e.target.value);
+                  handleOnChange("link", e.target.value, 5000);
                 }}
                 placeholder="Masukan URL"
               />

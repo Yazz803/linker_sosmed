@@ -10,6 +10,7 @@ import { Form, Input, message } from "antd";
 import ModalShareButton from "yazz/components/Admin/ModalShareButton";
 import { useAppContext } from "yazz/context/AppContext";
 import Metadata from "yazz/components/Metadata";
+import ModalHistoryVisitors from "yazz/components/Modal/ModalHistoryVisitors";
 
 export default function AccountPage() {
   const { state } = useAppContext();
@@ -69,6 +70,10 @@ export default function AccountPage() {
           />
           <NavbarAdmin />
           <ModalShareButton show={state.isShowModalShareButton} />
+          <ModalHistoryVisitors
+            user={user}
+            show={state.isShowModalHistoryVisitors}
+          />
           <div className="lg:px-96 lg:pt-24 pt-36">
             <div className="bg-white py-4 px-6 rounded-md shadow-lg shadow-gray-500/50">
               <h2 className="text-center text-black text-3xl">My Account</h2>

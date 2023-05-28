@@ -5,6 +5,7 @@ import {
   PoweroffOutlined,
   PlusOutlined,
   EyeOutlined,
+  UserSwitchOutlined,
 } from "@ant-design/icons";
 import { FloatButton } from "antd";
 import { useRouter } from "next/router";
@@ -12,7 +13,11 @@ import { useAuth } from "yazz/context/AuthContext";
 import { getUser } from "yazz/utils/helpers";
 import NavbarShareButton from "./NavbarShareButton";
 import { auth } from "yazz/config/firebase";
+import { GetCountVisitors } from "yazz/utils/getCountVisitors";
+import { useAppContext } from "yazz/context/AppContext";
+import { PARAMS } from "yazz/constants/constants";
 export default function NavbarMobile() {
+  const { dispatch } = useAppContext();
   const router = useRouter();
   const { currentUser } = useAuth();
   const user = getUser("uid", currentUser?.uid);
@@ -26,7 +31,18 @@ export default function NavbarMobile() {
       <div className="bg-gray-800 text-white fixed top-0 left-0 right-0 z-50 border-b border-gray-600">
         <div className="flex justify-between items-center px-4 py-2 border-b">
           <div className="logonanti font-bold text-2xl">Y</div>
-          <div>
+          <div className="flex">
+            <h3
+              onClick={() => {
+                dispatch({
+                  type: PARAMS.SET_MODAL_HISTORY_VISITORS,
+                  value: true,
+                });
+              }}
+              className="cursor-pointer flex items-center gap-2 hover:bg-gray-600 transition-all font-semibold px-4 py-2 rounded-md m-0"
+            >
+              <UserSwitchOutlined /> Total Visitor : {GetCountVisitors()}
+            </h3>
             <div className="w-28">
               <NavbarShareButton />
             </div>

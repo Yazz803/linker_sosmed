@@ -23,6 +23,7 @@ import Metadata from "yazz/components/Metadata";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
+import ModalHistoryVisitors from "yazz/components/Modal/ModalHistoryVisitors";
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = useState(false);
@@ -80,7 +81,7 @@ export default function LinksPage() {
       return message.warning("Link/Header sudah mencapai batas maksimal");
     let data = {
       link: values.link_url,
-      title: "Edit your title",
+      title: values.title_link ? values.title_link : "Edit your title",
       type: "link",
       img: "",
       is_active: true,
@@ -157,6 +158,10 @@ export default function LinksPage() {
           />
           <NavbarAdmin />
           <ModalShareButton show={state.isShowModalShareButton} />
+          <ModalHistoryVisitors
+            user={user}
+            show={state.isShowModalHistoryVisitors}
+          />
           <div className="lg:px-16">
             <div className="lg:flex">
               <div className="lg:w-[60%] lg:mt-24 pb-36 lg:pt-0 lg:pb-0 pt-36">
@@ -181,6 +186,18 @@ export default function LinksPage() {
                             autoComplete="off"
                             name="validateOnly"
                           >
+                            <Form.Item name="title_link">
+                              <Input
+                                placeholder="Link Title"
+                                showCount
+                                maxLength={30}
+                                bordered={false}
+                                // addonBefore={
+                                //   <span className="font-bold">https://</span>
+                                // }
+                                className="bg-gray-200 hover:bg-gray-200 focus:bg-gray-200"
+                              />
+                            </Form.Item>
                             <div className="flex gap-3 ">
                               <Form.Item
                                 name="link_url"
@@ -192,7 +209,7 @@ export default function LinksPage() {
                                   },
                                   {
                                     type: "url",
-                                    message: "",
+                                    message: "e.g: https://yazzlink.vercel.app",
                                   },
                                   {
                                     type: "string",

@@ -1,14 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 import { Dropdown } from "antd";
 import { useState } from "react";
-import { PicCenterOutlined, PieChartOutlined } from "@ant-design/icons";
+import {
+  EyeOutlined,
+  PicCenterOutlined,
+  PieChartOutlined,
+  UserOutlined,
+  UserSwitchOutlined,
+} from "@ant-design/icons";
 import LogoutButton from "../LogoutButton";
 import { useRouter } from "next/router";
 import { getUser } from "yazz/utils/helpers";
 import { useAuth } from "yazz/context/AuthContext";
 import NavbarShareButton from "./NavbarShareButton";
+import Link from "next/link";
+import { GetCountVisitors } from "yazz/utils/getCountVisitors";
+import { PARAMS } from "yazz/constants/constants";
+import { useAppContext } from "yazz/context/AppContext";
 
 export default function Navbar() {
+  const { dispatch } = useAppContext();
   const router = useRouter();
   const { currentUser } = useAuth();
   const user = getUser("uid", currentUser?.uid);
@@ -48,8 +59,26 @@ export default function Navbar() {
       key: "0",
     },
     {
-      label: <LogoutButton />,
       key: "1",
+      type: "group",
+      label: <span className="pl-2 font-semibold text-base">Account</span>,
+      children: [
+        {
+          key: "1-1",
+          label: (
+            <div
+              className="flex gap-2 items-center mb-3"
+              onClick={() => router.push("/admin/account")}
+            >
+              <UserOutlined /> My Account
+            </div>
+          ),
+        },
+        {
+          key: "1-2",
+          label: <LogoutButton />,
+        },
+      ],
     },
   ];
   return (
@@ -71,14 +100,31 @@ export default function Navbar() {
         >
           <PieChartOutlined /> Appearance
         </h3>
+        <h3
+          onClick={() => {
+            dispatch({ type: PARAMS.SET_MODAL_HISTORY_VISITORS, value: true });
+          }}
+          className="cursor-pointer flex items-center gap-2 hover:bg-gray-600 transition-all font-semibold px-4 py-2 rounded-md m-0"
+        >
+          <UserSwitchOutlined /> Total Visitor : {GetCountVisitors()}
+        </h3>
       </div>
       <div className="flex items-center gap-2">
         <NavbarShareButton />
+        <Link
+          href={`/u/${user?.data().username}`}
+          target="_blank"
+          className="cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-700 transition-all border font-semibold px-4 py-2 rounded-md m-0"
+        >
+          <EyeOutlined /> Visit your page
+        </Link>
         <Dropdown
           menu={{ items: items, onClick: handleMenuClick }}
           trigger={["click"]}
+          arrow
           open={open}
           onOpenChange={handleOpenChange}
+          className="shadow-xl"
         >
           <img
             src={user?.data().photoURL}

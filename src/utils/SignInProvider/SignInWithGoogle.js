@@ -38,6 +38,11 @@ export default function SignInWithGoogle() {
           fill: true,
           createdAt: serverTimestamp(),
         };
+
+        localStorage.setItem(
+          "user_yazz_linker",
+          JSON.stringify({ ...dataUser })
+        );
         if (!user) {
           addDataDoc("users", dataUser).then((res) => {
             addDataDoc(`users/${res.id}/appearance_settings`, appSettings);
@@ -51,7 +56,7 @@ export default function SignInWithGoogle() {
   return (
     <div
       onClick={onClickSignIn}
-      className="bg-blue-400 hover:bg-blue-500 transition-all text-gray-100 hover:text-white shadow font-bold text-sm py-3 px-4 rounded flex justify-start items-center cursor-pointer w-64"
+      className="bg-blue-500 hover:bg-blue-600 transition-all text-gray-100 hover:text-white shadow font-bold text-sm py-3 px-4 rounded flex justify-start items-center cursor-pointer w-64"
     >
       <svg
         viewBox="0 0 24 24"

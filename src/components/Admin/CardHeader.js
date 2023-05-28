@@ -1,30 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from "react";
-import { UnorderedListOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Input, Switch, Dropdown, Form } from "antd";
-import { updateDataDoc, deleteDataDoc } from "yazz/utils/helpers";
+import React, { useRef } from "react";
+import { UnorderedListOutlined } from "@ant-design/icons";
+import { Input, Switch, Form } from "antd";
+import { updateDataDoc } from "yazz/utils/helpers";
 import { useDrag, useDrop } from "react-dnd";
 import { ItemTypes } from "yazz/constants/constants";
+import ButtonDeleteCard from "./ButtonDeleteCard";
 
 export default function CardHeader(props) {
-  const [title, setTitle] = useState(props.document.data().title);
-  const [form] = Form.useForm();
-
-  useEffect(() => form.resetFields(), [form, props.document, props.user.id]);
-
-  useEffect(() => {
-    let foundDuplicate = props.links.find((document) => {
-      title == document.data().title;
-    });
-    if (foundDuplicate) return;
-    const timeout = setTimeout(() => {
-      updateDataDoc(`users/${props.user.id}/links`, props.document.id, {
-        title: title,
-      });
-    }, 3000);
-
-    return () => clearTimeout(timeout);
-  }, [title]);
 
   const handleChangeSwitch = (userId, docId, value) => {
     updateDataDoc(`users/${userId}/links`, docId, {
@@ -74,23 +57,28 @@ export default function CardHeader(props) {
           <div className="flex justify-between">
             <div className="w-full">
               <Form
-                form={form}
+                // form={form}
                 autoComplete="off"
-                initialValues={{ header_title: props.document.data().title }}
+                // initialValues={{ header_title: props.document.data().title }}
               >
-                <Form.Item name="header_title">
-                  <Input
-                    className="p-0 font-semibold w-[100%] text-center mb-3 text-white"
-                    size="large"
-                    // suffix={<EditOutlined />}
-                    bordered={false}
-                    onChange={(e) => {
-                      setTitle(e.target.value);
-                    }}
-                    maxLength={35}
-                    placeholder="Masukan title link"
-                  />
-                </Form.Item>
+                <Input
+                  className="p-0 font-semibold w-[100%] text-center mb-3 text-white"
+                  size="large"
+                  bordered={false}
+                  value={props.document.data().title}
+                  onChange={(e) => {
+                    updateDataDoc(
+                      `users/${props.user.id}/links`,
+                      props.document.id,
+                      {
+                        title: e.target.value,
+                      }
+                    );
+                    // setTitle(e.target.value);
+                  }}
+                  maxLength={35}
+                  placeholder="Masukan title link"
+                />
               </Form>
             </div>
             <div>
@@ -109,39 +97,7 @@ export default function CardHeader(props) {
           </div>
           <div className="flex justify-between">
             <div className="something here"></div>
-            <Dropdown
-              trigger={["click"]}
-              placement="bottomLeft"
-              arrow={{ pointAtCenter: true }}
-              className="text-red-500"
-              menu={{
-                items: [
-                  {
-                    label: (
-                      <>
-                        <p className="font-semibold">Yakin mau di Hapus?</p>
-                        <div className="flex justify-around">
-                          <button
-                            onClick={() =>
-                              deleteDataDoc(
-                                `users/${props.user.id}/links`,
-                                props.document.id
-                              )
-                            }
-                            className="text-red-500 font-bold"
-                          >
-                            YES!
-                          </button>
-                          <button className="font-bold">NOPE!</button>
-                        </div>
-                      </>
-                    ),
-                  },
-                ],
-              }}
-            >
-              <DeleteOutlined />
-            </Dropdown>
+            <ButtonDeleteCard user={props.user} document={props.document} />
           </div>
         </div>
       </div>

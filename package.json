@@ -11,6 +11,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@firebase/storage": "^0.11.2",
+    "@use-gesture/react": "^10.2.27",
     "antd": "^5.5.0",
     "antd-img-crop": "^4.12.2",
     "autoprefixer": "10.4.14",
@@ -30,6 +31,7 @@
     "react-drag-listview": "^2.0.0",
     "react-firebase-hooks": "^5.1.1",
     "react-responsive": "^9.0.2",
+    "react-spring": "^9.7.1",
     "tailwindcss": "3.3.2"
   }
 }

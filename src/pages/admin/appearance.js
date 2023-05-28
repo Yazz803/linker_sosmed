@@ -20,6 +20,7 @@ import {
 } from "@firebase/storage";
 import { storage } from "yazz/config/firebase";
 import { UploadOutlined } from "@ant-design/icons";
+import ModalHistoryVisitors from "yazz/components/Modal/ModalHistoryVisitors";
 
 export default function AppearancePage() {
   const [loadingUploadPP, setLoadingUploadPP] = useState(false);
@@ -118,6 +119,10 @@ export default function AppearancePage() {
             icon="/images/loadingscreen.gif"
           />
           <ModalShareButton show={state.isShowModalShareButton} />
+          <ModalHistoryVisitors
+            user={user}
+            show={state.isShowModalHistoryVisitors}
+          />
           <NavbarAdmin />
           <div className="lg:px-16 px-5">
             <div className="lg:flex">
@@ -209,7 +214,7 @@ export default function AppearancePage() {
                     message={
                       <span className="font-bold">Costum Appearance</span>
                     }
-                    description="Completely customize your Linktree profile. Change your
+                    description="Completely customize your Linker profile. Change your
                     background with colors, gradients and images. Choose a
                     button style, change the typeface and more."
                     className="my-5 bg-white"

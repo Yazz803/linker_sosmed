@@ -1,20 +1,27 @@
 /* eslint-disable @next/next/no-img-element */
 import { DashOutlined } from "@ant-design/icons";
+import { serverTimestamp } from "firebase/firestore";
 import { useRouter } from "next/router";
 import React from "react";
 import ModalShareButtonUser from "yazz/components/Admin/ModalShareButtonUser";
 import UserButtonLink from "yazz/components/Admin/UserButtonLink";
 import UserHeadline from "yazz/components/Admin/UserHeadline";
 import Metadata from "yazz/components/Metadata";
+import ModalShareButtonLink from "yazz/components/Modal/ModalShareButtonLink";
 import Watermark from "yazz/components/Watermark";
 import { PARAMS } from "yazz/constants/constants";
 import { useAppContext } from "yazz/context/AppContext";
-import { GetSubCollection, getUser } from "yazz/utils/helpers";
+import GetCollection, {
+  GetSubCollection,
+  addDataDoc,
+  getUser,
+} from "yazz/utils/helpers";
 
 export default function UserWebPage() {
   const { state, dispatch } = useAppContext();
   const router = useRouter();
   const { username } = router.query;
+  const dataUsers = GetCollection("users");
   const user = getUser("username", username);
   const appearance = GetSubCollection(
     `users/${user?.id}/appearance_settings`
@@ -26,6 +33,51 @@ export default function UserWebPage() {
   const handleOpenModalShare = () => {
     dispatch({ type: PARAMS.SET_MODAL_SHARE_BUTTON_USER, value: true });
   };
+
+  const incrementVisitors = (user) => {
+    let isHaveBeenVisitor = JSON.parse(
+      localStorage.getItem("have_been_visitor")
+    );
+    let dataUserBio = JSON.parse(localStorage.getItem("data_user_bio"));
+
+    if (isHaveBeenVisitor == null || dataUserBio.username != username) {
+      let dataVisitor = JSON.parse(localStorage.getItem("user_yazz_linker"));
+      let foundVisitor = dataUsers.find(
+        (doc) => doc.data().uid === dataVisitor?.uid
+      );
+      let visitor = {
+        name: "Anonymous",
+        profile_title: "Anonymous",
+        photoURL: "/images/photo-profile.webp",
+        createdAt: serverTimestamp(),
+      };
+      if (foundVisitor) {
+        visitor = {
+          id: foundVisitor.id,
+          uid: foundVisitor.data().uid,
+          name: foundVisitor.data().name,
+          profile_title: foundVisitor.data().profile_title,
+          username: foundVisitor.data().username,
+          photoURL: foundVisitor.data().photoURL,
+          createdAt: serverTimestamp(),
+        };
+      }
+      addDataDoc(`users/${user.id}/history_visitors`, visitor);
+      let dataUserParam = {
+        name: user.data().name,
+        profile_title: user.data().profile_title,
+        username: user.data().username,
+      };
+      localStorage.setItem("have_been_visitor", JSON.stringify(true));
+      localStorage.setItem("data_user_bio", JSON.stringify(dataUserParam));
+    }
+  };
+
+  if (user?.exists) {
+    incrementVisitors(user);
+    // console.log(user);
+  }
+
   return (
     <>
       {user && (
@@ -106,13 +158,20 @@ export default function UserWebPage() {
                   if (document.data().is_active) {
                     if (document.data().type == "link") {
                       return (
-                        <UserButtonLink
-                          document={document}
-                          appearance={appearance}
-                          links={links}
-                          index={i}
-                          key={i}
-                        />
+                        <>
+                          <ModalShareButtonLink
+                            show={state.isShowModalShareButtonLink}
+                            user={user}
+                            document={document}
+                          />
+                          <UserButtonLink
+                            document={document}
+                            appearance={appearance}
+                            links={links}
+                            index={i}
+                            key={i}
+                          />
+                        </>
                       );
                     }
 

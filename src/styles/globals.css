@@ -100,3 +100,21 @@ body {
 .screen::-webkit-scrollbar {
   display: none;
 }
+
+.animate-scale:hover {
+  /* animation: scale .7s; */
+  animation-name: scale;
+  animation-duration: .2s;
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

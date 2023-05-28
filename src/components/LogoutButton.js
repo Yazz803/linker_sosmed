@@ -11,6 +11,7 @@ export default function LogoutButton() {
     auth.signOut();
     router.push("/login");
     message.success("Berhasil Logout!");
+    localStorage.removeItem("user_yazz_linker");
   };
   return (
     currentUser && (

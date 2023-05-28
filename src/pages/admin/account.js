@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from "react";
 import NavbarAdmin from "yazz/components/Admin/NavbarAdmin";
@@ -9,6 +10,7 @@ import { Form, Input, message } from "antd";
 import ModalShareButton from "yazz/components/Admin/ModalShareButton";
 import { useAppContext } from "yazz/context/AppContext";
 import Metadata from "yazz/components/Metadata";
+import ModalHistoryVisitors from "yazz/components/Modal/ModalHistoryVisitors";
 
 export default function AccountPage() {
   const { state } = useAppContext();
@@ -28,12 +30,16 @@ export default function AccountPage() {
       (doc) =>
         doc.data().username.toLowerCase() == values.username.toLowerCase()
     );
+    let maxLength = 16;
     if (foundUser) {
       message.error("Username sudah ada yang pakai");
     }
+    if (maxLength < values.username.length) {
+      message.warning("Username terlalu panjang! Maksimal 16 karakter");
+    }
     if (!foundUser) {
       updateDataDoc(`users`, user?.id, {
-        username: values.username,
+        username: values.username.toLowerCase(),
       });
       message.success("Username berhasil diubah");
     }
@@ -64,6 +70,10 @@ export default function AccountPage() {
           />
           <NavbarAdmin />
           <ModalShareButton show={state.isShowModalShareButton} />
+          <ModalHistoryVisitors
+            user={user}
+            show={state.isShowModalHistoryVisitors}
+          />
           <div className="lg:px-96 lg:pt-24 pt-36">
             <div className="bg-white py-4 px-6 rounded-md shadow-lg shadow-gray-500/50">
               <h2 className="text-center text-black text-3xl">My Account</h2>
@@ -113,13 +123,31 @@ export default function AccountPage() {
                     <Form.Item
                       name="username"
                       className=" border-b-2 ml-2 border-white"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Masukan username kamu!",
+                        },
+                        () => ({
+                          validator(_, value) {
+                            if (!value || value.match(/^[a-zA-Z0-9]+$/)) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(
+                              new Error(
+                                "Username hanya boleh mengandung huruf dan angka!"
+                              )
+                            );
+                          },
+                        }),
+                      ]}
                     >
                       <Input
                         value={user.data().username}
                         size="large"
                         bordered={false}
                         className="px-0"
-                        maxLength={20}
+                        maxLength={16}
                       />
                     </Form.Item>
                     <div className="flex justify-end">

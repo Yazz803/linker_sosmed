@@ -7,9 +7,10 @@ import PreviewHeadline from "./PreviewHeadline";
 import { DashOutlined } from "@ant-design/icons";
 import { useAppContext } from "yazz/context/AppContext";
 import { PARAMS } from "yazz/constants/constants";
+import { Spin } from "antd";
 
 export default function PreviewWeb() {
-  const { dispatch } = useAppContext();
+  const { state, dispatch } = useAppContext();
   const { currentUser } = useAuth();
   const user = getUser("uid", currentUser.uid);
   const appearance = getAppearance(user?.id);
@@ -25,7 +26,7 @@ export default function PreviewWeb() {
     <div className="smartphone shadow-lg shadow-gray-500/100">
       {user && (
         <div
-          className={`screen`}
+          className={`screen relative`}
           style={{
             backgroundImage: `url("${appearance?.data().background_image}")`,
             backgroundRepeat: "no-repeat",
@@ -36,7 +37,11 @@ export default function PreviewWeb() {
             fontFamily: `'${appearance?.data().font_family}', sans-serif`,
           }}
         >
-          <nav className="backdrop-blur-md border rounded-full py-1 px-2 left-40 right-40 fixed bg-[#ffffff4d]">
+          <Spin
+            spinning={state.isLoadingPreview}
+            className="absolute z-50 bg-[#00000069] p-1 rounded-full backdrop-blur-sm top-1 left-1"
+          />
+          <nav className="backdrop-blur-md border rounded-full py-1 px-2 fixed m-auto w-40 bg-[#ffffff4d] z-50">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <img
@@ -74,7 +79,7 @@ export default function PreviewWeb() {
             <h3
               className="font-semibold backdrop-blur-sm px-1 py-[2px] rounded-sm text-[.8rem] mt-3"
               style={{
-                backgroundColor: `${appearance?.data().button_color}90`,
+                backgroundColor: `${appearance?.data().button_color}100`,
                 color: appearance?.data().font_color,
               }}
             >
@@ -83,7 +88,7 @@ export default function PreviewWeb() {
             <small
               className="text-[9px] backdrop-blur-sm px-1 py-[2px] rounded-sm"
               style={{
-                backgroundColor: `${appearance?.data().button_color}90`,
+                backgroundColor: `${appearance?.data().button_color}100`,
                 color: appearance?.data().font_color,
               }}
             >

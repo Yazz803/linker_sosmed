@@ -168,6 +168,7 @@ export default function UserWebPage() {
                             document={document}
                             appearance={appearance}
                             links={links}
+                            user={user}
                             index={i}
                             key={i}
                           />

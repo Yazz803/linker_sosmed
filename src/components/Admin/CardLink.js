@@ -1,15 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef } from "react";
-import { UnorderedListOutlined } from "@ant-design/icons";
-import { Input, Switch, Form } from "antd";
+import {
+  QuestionOutlined,
+  UnorderedListOutlined,
+  UsergroupAddOutlined,
+} from "@ant-design/icons";
+import { Tooltip, Input, Switch, Form } from "antd";
 import { updateDataDoc } from "yazz/utils/helpers";
 import { useDrag, useDrop } from "react-dnd";
-import { ItemTypes } from "yazz/constants/constants";
+import { ItemTypes, PARAMS } from "yazz/constants/constants";
 import ButtonDeleteCard from "./ButtonDeleteCard";
+import { GetCountLinkClicks } from "yazz/utils/getCountLinkClicks";
+import ModalHistoryLinkClicks from "../Modal/ModalHistoryLinkClicks";
+import { useAppContext } from "yazz/context/AppContext";
 
 export default function CardLink(props) {
-  const handleOnChange = (field, value) => {
-    if (value.length > 20) return;
+  const { state, dispatch } = useAppContext();
+
+  const handleOnChange = (field, value, maxLength = 20) => {
+    if (value.length > maxLength) return;
     updateDataDoc(`users/${props.user.id}/links`, props.document.id, {
       [field]: value,
       is_active: true,
@@ -59,6 +68,29 @@ export default function CardLink(props) {
       className="bg-gray-600 transition-all text-white rounded-lg mt-4 py-6 pr-4 shadow-2xl shadow-gray-500/100"
       style={{ scale, opacity }}
     >
+      <Tooltip
+        trigger={["click"]}
+        placement="right"
+        title={
+          <div className="text-black p-2">
+            <span>Beberapa fitur pada Card ini :</span>
+            <ul>
+              <li style={{ listStyle: "inside" }}>Draggable Card</li>
+              <li style={{ listStyle: "inside" }}>
+                Edit Link Title dan Link Url
+              </li>
+              <li style={{ listStyle: "inside" }}>Show / Hide Link (Switch)</li>
+              <li style={{ listStyle: "inside" }}>Delete Card Link</li>
+              <li style={{ listStyle: "inside" }}>
+                History clicked (click for detail)
+              </li>
+            </ul>
+          </div>
+        }
+        color="white"
+      >
+        <QuestionOutlined className="absolute -right-3 -top-3 bg-gray-600 p-2 rounded-full cursor-pointer" />
+      </Tooltip>
       <div className="flex gap-6 my-auto">
         <div ref={cardRef} className="pl-4 m-auto py-8 cursor-pointer">
           <UnorderedListOutlined />
@@ -83,7 +115,7 @@ export default function CardLink(props) {
                 bordered={false}
                 value={props.document.data().link}
                 onChange={(e) => {
-                  handleOnChange("link", e.target.value);
+                  handleOnChange("link", e.target.value, 5000);
                 }}
                 placeholder="Masukan URL"
               />
@@ -101,8 +133,26 @@ export default function CardLink(props) {
               />
             </div>
           </div>
-          <div className="flex justify-between">
-            <div className="something here"></div>
+          <div className="flex items-center justify-between mt-2">
+            <div className="something here">
+              <ModalHistoryLinkClicks
+                show={state.isShowModalHistoryLinkClicks}
+                document={props.document}
+                user={props.user}
+              />
+              <small
+                onClick={() => {
+                  dispatch({
+                    type: PARAMS.SET_MODAL_HISTORY_LINK_CLICKS,
+                    value: true,
+                  });
+                }}
+                className="font-semibold text-gray-200 flex items-center gap-1 transition-all hover:bg-gray-800 rounded-sm pr-2 py-1 cursor-pointer"
+              >
+                <UsergroupAddOutlined /> Clicked :{" "}
+                {GetCountLinkClicks(props.document)}
+              </small>
+            </div>
             <ButtonDeleteCard user={props.user} document={props.document} />
           </div>
         </div>

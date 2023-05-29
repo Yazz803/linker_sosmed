@@ -18,12 +18,12 @@ export default function ButtonDeleteCard(props) {
                 <p className="font-semibold">Yakin mau di Hapus?</p>
                 <div className="flex justify-around">
                   <button
-                    onClick={() =>
+                    onClick={() => {
                       deleteDataDoc(
                         `users/${props.user.id}/links`,
                         props.document.id
-                      )
-                    }
+                      );
+                    }}
                     className="text-red-500 font-bold"
                   >
                     YES!

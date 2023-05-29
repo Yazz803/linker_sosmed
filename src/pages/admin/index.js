@@ -62,6 +62,8 @@ export default function LinksPage() {
 
   useEffect(() => {
     if (!currentUser) router.push("/login");
+    let foundUser = localStorage.getItem("user_yazz_linker");
+    if (!foundUser) router.push("/logout");
   }, [currentUser, router]);
 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });

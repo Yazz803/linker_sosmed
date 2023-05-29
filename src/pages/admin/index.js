@@ -26,6 +26,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import ModalHistoryVisitors from "yazz/components/Modal/ModalHistoryVisitors";
 import { PARAMS } from "yazz/constants/constants";
+import ModalHistoryLinkClicks from "yazz/components/Modal/ModalHistoryLinkClicks";
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = useState(false);
@@ -171,6 +172,10 @@ export default function LinksPage() {
           <ModalHistoryVisitors
             user={user}
             show={state.isShowModalHistoryVisitors}
+          />
+          <ModalHistoryLinkClicks
+            show={state.isShowModalHistoryLinkClicks}
+            user={user}
           />
           <div className="lg:px-16">
             <div className="lg:flex">

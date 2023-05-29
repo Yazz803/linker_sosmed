@@ -6,7 +6,7 @@ export const GetCountLinkClicks = (linkDoc) => {
   let { currentUser } = useAuth();
   const user = getUser("uid", currentUser?.uid);
   let historyClickers = GetSubCollection(
-    `users/${user?.id}/links/${linkDoc.id}/history_link_clicks`
+    `users/${user?.id}/links/${linkDoc?.id}/history_link_clicks`
   );
   // Count without current user
   // historyClickers = historyClickers.filter(

@@ -11,11 +11,10 @@ import { useDrag, useDrop } from "react-dnd";
 import { ItemTypes, PARAMS } from "yazz/constants/constants";
 import ButtonDeleteCard from "./ButtonDeleteCard";
 import { GetCountLinkClicks } from "yazz/utils/getCountLinkClicks";
-import ModalHistoryLinkClicks from "../Modal/ModalHistoryLinkClicks";
 import { useAppContext } from "yazz/context/AppContext";
 
 export default function CardLink(props) {
-  const { state, dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
 
   const handleOnChange = (field, value, maxLength = 20) => {
     if (value.length > maxLength) return;
@@ -135,16 +134,15 @@ export default function CardLink(props) {
           </div>
           <div className="flex items-center justify-between mt-2">
             <div className="something here">
-              <ModalHistoryLinkClicks
-                show={state.isShowModalHistoryLinkClicks}
-                document={props.document}
-                user={props.user}
-              />
               <small
                 onClick={() => {
                   dispatch({
                     type: PARAMS.SET_MODAL_HISTORY_LINK_CLICKS,
                     value: true,
+                    data: {
+                      user: props.user,
+                      document: props.document,
+                    },
                   });
                 }}
                 className="font-semibold text-gray-200 flex items-center gap-1 transition-all hover:bg-gray-800 rounded-sm pr-2 py-1 cursor-pointer"

@@ -4,8 +4,10 @@ export const initialState = {
   isShowModalShareButton: false,
   isShowModalShareButtonUser: false,
   isShowModalShareButtonLink: false,
+  dataModalShareButtonLink: {},
   isShowModalHistoryVisitors: false,
   isShowModalHistoryLinkClicks: false,
+  dataModalHistoryLinkClicks: {},
   isLoadingPreview: false,
   isShowModalTourNavbar: false,
 };
@@ -28,6 +30,7 @@ export const AppReducer = (state = initialState, action) => {
       return {
         ...state,
         isShowModalShareButtonLink: action.value,
+        dataModalShareButtonLink: action.data,
       };
     }
     case PARAMS.SET_MODAL_HISTORY_VISITORS: {
@@ -40,6 +43,7 @@ export const AppReducer = (state = initialState, action) => {
       return {
         ...state,
         isShowModalHistoryLinkClicks: action.value,
+        dataModalHistoryLinkClicks: action.data,
       };
     }
     case PARAMS.SET_LOADING_PREVIEW: {

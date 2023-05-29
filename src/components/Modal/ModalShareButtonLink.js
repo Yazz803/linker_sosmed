@@ -12,7 +12,9 @@ import LinkedinIcon from "../Icon/LinkedinIcon";
 
 export default function ModalShareButtonLink(props) {
   const router = useRouter();
-  const { dispatch } = useAppContext();
+  const { state, dispatch } = useAppContext();
+  let currentUser = state.dataModalShareButtonLink?.user;
+  let singleDoc = state.dataModalShareButtonLink?.document;
   const handleOnCancel = () => {
     dispatch({ type: PARAMS.SET_MODAL_SHARE_BUTTON_LINK, value: false });
   };
@@ -30,20 +32,20 @@ export default function ModalShareButtonLink(props) {
     >
       <div className="text-base mt-7">
         <ShareButtonLink
-          link={`https://wa.me/?text=${props.document.data().link}`}
+          link={`https://wa.me/?text=${singleDoc?.data().link}`}
           icon={<WhatsappIcon />}
         >
           Share via Whatsapp
         </ShareButtonLink>
         <ShareButtonLink
           link={`https://www.linkedin.com/shareArticle?mini=true&url=${
-            props.document.data().link
+            singleDoc?.data().link
           }&title=Check%20out%20${
-            props.user.data().username
+            currentUser?.data().username
           }%20on%20Yazz&summary=Check%20out%20${
-            props.user.data().username
+            currentUser?.data().username
           }%20on%20Yazz&source=${process.env.NEXT_PUBLIC_SITE_URL}/u/${
-            props.user.data().username
+            currentUser?.data().username
           }`}
           icon={<LinkedinIcon />}
         >
@@ -56,7 +58,7 @@ export default function ModalShareButtonLink(props) {
           <div className="text-center">
             <span
               onClick={() => {
-                copyToClipboard(props.document.data().link);
+                copyToClipboard(singleDoc?.data().link);
               }}
               className="cursor-pointer bg-gray-600 text-white border rounded-md px-3 py-2 text-base font-semibold"
             >

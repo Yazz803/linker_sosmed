@@ -111,6 +111,10 @@ export default function UserButtonLink(props) {
               dispatch({
                 type: PARAMS.SET_MODAL_SHARE_BUTTON_LINK,
                 value: true,
+                data: {
+                  user: props.user,
+                  document: props.document,
+                },
               });
             }}
             className="cursor-pointer flex items-center justify-center h-10 w-10 rounded-full transition-all hover:bg-white"

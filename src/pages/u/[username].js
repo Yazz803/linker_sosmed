@@ -101,6 +101,7 @@ export default function UserWebPage() {
                   show={state.isShowModalShareButtonUser}
                   user={user}
                 />
+                <ModalShareButtonLink show={state.isShowModalShareButtonLink} />
                 <nav className="backdrop-blur-md border rounded-full z-50 py-2 lg:mx-80 px-4 fixed lg:-left-10 lg:-right-6 left-5 right-5 bg-[#ffffff4d]">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
@@ -159,11 +160,6 @@ export default function UserWebPage() {
                     if (document.data().type == "link") {
                       return (
                         <>
-                          <ModalShareButtonLink
-                            show={state.isShowModalShareButtonLink}
-                            user={user}
-                            document={document}
-                          />
                           <UserButtonLink
                             document={document}
                             appearance={appearance}

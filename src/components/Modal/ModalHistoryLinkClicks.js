@@ -10,9 +10,12 @@ import { GetCountLinkClicks } from "yazz/utils/getCountLinkClicks";
 import { GetSubCollection } from "yazz/utils/helpers";
 
 export default function ModalHistoryLinkClicks(props) {
+  const { state } = useAppContext();
   const router = useRouter();
+  let user = state.dataModalHistoryLinkClicks?.user;
+  let document = state.dataModalHistoryLinkClicks?.document;
   const historyLinkClicks = GetSubCollection(
-    `users/${props.user.id}/links/${props.document.id}/history_link_clicks`,
+    `users/${user?.id}/links/${document?.id}/history_link_clicks`,
     {
       orderBy: ["createdAt", "desc"],
       limit: 50,
@@ -80,7 +83,7 @@ export default function ModalHistoryLinkClicks(props) {
           </div>
         ))}
         <p className="border-b font-semibold">
-          Total Visitors : {GetCountLinkClicks(props.document)}
+          Total Visitors : {GetCountLinkClicks(document)}
         </p>
         <div
           onClick={() => {

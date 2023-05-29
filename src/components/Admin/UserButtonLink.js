@@ -4,12 +4,45 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useAppContext } from "yazz/context/AppContext";
 import { PARAMS } from "yazz/constants/constants";
+import GetCollection, { addDataDoc } from "yazz/utils/helpers";
+import { serverTimestamp } from "firebase/firestore";
 
 export default function UserButtonLink(props) {
   const { dispatch } = useAppContext();
   const [buttonHover, setButtonHover] = useState(
     Array(props.links.length).fill(false)
   );
+  const dataUsers = GetCollection("users");
+
+  const incrementCountClicks = () => {
+    let dataVisitor = JSON.parse(localStorage.getItem("user_yazz_linker"));
+    let foundVisitor = dataUsers.find(
+      (doc) => doc.data().uid === dataVisitor?.uid
+    );
+    let visitor = {
+      name: "Anonymous",
+      profile_title: "Anonymous",
+      photoURL: "/images/photo-profile.webp",
+      createdAt: serverTimestamp(),
+    };
+    if (foundVisitor) {
+      visitor = {
+        id: foundVisitor.id,
+        uid: foundVisitor.data().uid,
+        name: foundVisitor.data().name,
+        profile_title: foundVisitor.data().profile_title,
+        username: foundVisitor.data().username,
+        photoURL: foundVisitor.data().photoURL,
+        createdAt: serverTimestamp(),
+      };
+    }
+    if (props.user.data().uid !== dataVisitor?.uid) {
+      addDataDoc(
+        `users/${props.user.id}/links/${props.document.id}/history_link_clicks`,
+        visitor
+      );
+    }
+  };
 
   const handleMouseEnter = (index) => {
     setButtonHover((prevButtonHover) => {
@@ -48,7 +81,14 @@ export default function UserButtonLink(props) {
     };
   }
   return (
-    <Link href={props.document.data().link} target="_blank" passHref>
+    <Link
+      href={props.document.data().link}
+      target="_blank"
+      passHref
+      onClick={() => {
+        incrementCountClicks();
+      }}
+    >
       <div
         className="button-fill-rounded-lg mt-5 text-center cursor-pointer transition-all animate-scale backdrop-blur-sm"
         style={buttonStyle}

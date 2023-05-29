@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import { Dropdown } from "antd";
-import { useState } from "react";
+import { Dropdown, Tour } from "antd";
+import { useRef, useState } from "react";
 import {
   EyeOutlined,
   PicCenterOutlined,
   PieChartOutlined,
+  QuestionCircleOutlined,
   UserOutlined,
   UserSwitchOutlined,
 } from "@ant-design/icons";
@@ -19,7 +20,10 @@ import { PARAMS } from "yazz/constants/constants";
 import { useAppContext } from "yazz/context/AppContext";
 
 export default function Navbar() {
-  const { dispatch } = useAppContext();
+  const refAppearance = useRef(null);
+  const refTotalVisitors = useRef(null);
+  const refVisitYourPage = useRef(null);
+  const { state, dispatch } = useAppContext();
   const router = useRouter();
   const { currentUser } = useAuth();
   const user = getUser("uid", currentUser?.uid);
@@ -32,6 +36,15 @@ export default function Navbar() {
   const handleOpenChange = (flag) => {
     setOpen(flag);
   };
+
+  const handleOpenTour = () => {
+    dispatch({ type: PARAMS.SET_MODAL_TOUR_NAVBAR, value: true });
+  };
+
+  const handleCloseTour = () => {
+    dispatch({ type: PARAMS.SET_MODAL_TOUR_NAVBAR, value: false });
+  };
+
   const items = [
     {
       label: (
@@ -81,6 +94,26 @@ export default function Navbar() {
       ],
     },
   ];
+
+  const stepsTour = [
+    {
+      title: "Appearance",
+      description:
+        "Kalian bisa mengubah tampilan website kalian mulai dari photo profile, background image, button color, font color, dll.",
+      target: () => refAppearance.current,
+    },
+    {
+      title: "Total Visitors",
+      description:
+        "Click untuk lihat siapa saja yang mengunjungi website kalian.",
+      target: () => refTotalVisitors.current,
+    },
+    {
+      title: "Visit Your Page",
+      description: "Lihat tampilan website dengan click button diatas.",
+      target: () => refVisitYourPage.current,
+    },
+  ];
   return (
     <div className="flex justify-between border-b-2 px-10 py-2 bg-gray-800 text-white fixed top-0 right-0 left-0 z-50">
       <div className="flex items-center">
@@ -93,6 +126,7 @@ export default function Navbar() {
           <PicCenterOutlined /> Links
         </h3>
         <h3
+          ref={refAppearance}
           onClick={() => {
             router.push("/admin/appearance");
           }}
@@ -101,6 +135,7 @@ export default function Navbar() {
           <PieChartOutlined /> Appearance
         </h3>
         <h3
+          ref={refTotalVisitors}
           onClick={() => {
             dispatch({ type: PARAMS.SET_MODAL_HISTORY_VISITORS, value: true });
           }}
@@ -112,6 +147,7 @@ export default function Navbar() {
       <div className="flex items-center gap-2">
         <NavbarShareButton />
         <Link
+          ref={refVisitYourPage}
           href={`/u/${user?.data().username}`}
           target="_blank"
           className="cursor-pointer flex justify-center items-center gap-2 hover:bg-gray-700 transition-all border font-semibold px-4 py-2 rounded-md m-0"
@@ -133,6 +169,20 @@ export default function Navbar() {
             onClick={() => setOpen(!open)}
           />
         </Dropdown>
+        <Tour
+          open={state.isShowModalTourNavbar}
+          onClose={() => handleCloseTour()}
+          onFinish={() => {
+            console.log("beres kang");
+          }}
+          steps={stepsTour}
+        />
+        <button
+          onClick={handleOpenTour}
+          className="fixed bottom-14 right-10 w-10 h-10 bg-black rounded-full hover:bg-white transition-all"
+        >
+          <QuestionCircleOutlined className="text-2xl hover:text-black transition-all" />
+        </button>
       </div>
     </div>
   );

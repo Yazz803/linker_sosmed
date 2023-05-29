@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from "react";
 import NavbarAdmin from "yazz/components/Admin/NavbarAdmin";
@@ -24,6 +25,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import ModalHistoryVisitors from "yazz/components/Modal/ModalHistoryVisitors";
+import { PARAMS } from "yazz/constants/constants";
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = useState(false);
@@ -54,7 +56,7 @@ const SubmitButton = ({ form }) => {
 };
 
 export default function LinksPage() {
-  const { state } = useAppContext();
+  const { state, dispatch } = useAppContext();
   const router = useRouter();
   const { currentUser } = useAuth();
   const [form] = Form.useForm();
@@ -64,6 +66,12 @@ export default function LinksPage() {
     if (!currentUser) router.push("/login");
     let foundUser = localStorage.getItem("user_yazz_linker");
     if (!foundUser) router.push("/logout");
+
+    let isTour = localStorage.getItem("is_tour");
+    if (!isTour) {
+      dispatch({ type: PARAMS.SET_MODAL_TOUR_NAVBAR, value: true });
+      localStorage.setItem("is_tour", JSON.parse(true));
+    }
   }, [currentUser, router]);
 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });

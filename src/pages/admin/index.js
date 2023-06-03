@@ -27,6 +27,8 @@ import { TouchBackend } from "react-dnd-touch-backend";
 import ModalHistoryVisitors from "yazz/components/Modal/ModalHistoryVisitors";
 import { PARAMS } from "yazz/constants/constants";
 import ModalHistoryLinkClicks from "yazz/components/Modal/ModalHistoryLinkClicks";
+import { getMessaging, getToken } from "firebase/messaging";
+import { app } from "yazz/config/firebase";
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = useState(false);
@@ -62,6 +64,41 @@ export default function LinksPage() {
   const { currentUser } = useAuth();
   const [form] = Form.useForm();
   const user = getUser("uid", currentUser?.uid);
+
+  // request Permission notification
+  useEffect(() => {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("Notification permission granted");
+        const messaging = getMessaging(app);
+        getToken(messaging, {
+          vapidKey: process.env.NEXT_PUBLIC_FIREBASE_KEY_PAIR,
+        })
+          .then((currentToken) => {
+            if (currentToken) {
+              // Send the token to your server and update the UI if necessary
+              // ...
+              console.log({ currentToken });
+              if (user) {
+                updateDataDoc(`users`, user.id, {
+                  fcmToken: currentToken,
+                });
+              }
+            } else {
+              // Show permission request UI
+              console.log(
+                "No registration token available. Request permission to generate one."
+              );
+              // ...
+            }
+          })
+          .catch((err) => {
+            console.log("An error occurred while retrieving token. ", err);
+            // ...
+          });
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (!currentUser) router.push("/login");
@@ -265,7 +302,7 @@ export default function LinksPage() {
                     <DndProvider backend={handleDragBackendDnd}>
                       <div>
                         {links.map((document, i) => (
-                          <>
+                          <div key={i}>
                             {document.data().type == "link" && (
                               <CardLink
                                 links={links}
@@ -286,7 +323,7 @@ export default function LinksPage() {
                                 key={i}
                               />
                             )}
-                          </>
+                          </div>
                         ))}
                       </div>
                     </DndProvider>

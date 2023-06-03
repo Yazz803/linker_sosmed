@@ -67,38 +67,38 @@ export default function LinksPage() {
 
   // request Permission notification
   useEffect(() => {
-    Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        console.log("Notification permission granted");
-        const messaging = getMessaging(app);
-        getToken(messaging, {
-          vapidKey: process.env.NEXT_PUBLIC_FIREBASE_KEY_PAIR,
-        })
-          .then((currentToken) => {
-            if (currentToken) {
-              // Send the token to your server and update the UI if necessary
-              // ...
-              console.log({ currentToken });
-              if (user) {
+    if (user) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          console.log("Notification permission granted");
+          const messaging = getMessaging(app);
+          getToken(messaging, {
+            vapidKey: process.env.NEXT_PUBLIC_FIREBASE_KEY_PAIR,
+          })
+            .then((currentToken) => {
+              if (currentToken) {
+                // Send the token to your server and update the UI if necessary
+                // ...
+                console.log({ currentToken });
                 updateDataDoc(`users`, user.id, {
                   fcmToken: currentToken,
                 });
+              } else {
+                // Show permission request UI
+                console.log(
+                  "No registration token available. Request permission to generate one."
+                );
+                // ...
               }
-            } else {
-              // Show permission request UI
-              console.log(
-                "No registration token available. Request permission to generate one."
-              );
+            })
+            .catch((err) => {
+              console.log("An error occurred while retrieving token. ", err);
               // ...
-            }
-          })
-          .catch((err) => {
-            console.log("An error occurred while retrieving token. ", err);
-            // ...
-          });
-      }
-    });
-  }, []);
+            });
+        }
+      }); 
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!currentUser) router.push("/login");

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { DashOutlined } from "@ant-design/icons";
 import { serverTimestamp } from "firebase/firestore";
+import _ from "lodash";
 import { useRouter } from "next/router";
 import React from "react";
 import ModalShareButtonUser from "yazz/components/Admin/ModalShareButtonUser";
@@ -9,6 +10,7 @@ import UserHeadline from "yazz/components/Admin/UserHeadline";
 import Metadata from "yazz/components/Metadata";
 import ModalShareButtonLink from "yazz/components/Modal/ModalShareButtonLink";
 import Watermark from "yazz/components/Watermark";
+import api from "yazz/config/api";
 import { PARAMS } from "yazz/constants/constants";
 import { useAppContext } from "yazz/context/AppContext";
 import GetCollection, {
@@ -29,6 +31,9 @@ export default function UserWebPage() {
   const links = GetSubCollection(`users/${user?.id}/links`, {
     orderBy: ["list_number", "asc"],
   });
+  const history_visitors = GetSubCollection(
+    `users/${user?.id}/history_visitors`
+  );
 
   const handleOpenModalShare = () => {
     dispatch({ type: PARAMS.SET_MODAL_SHARE_BUTTON_USER, value: true });
@@ -70,11 +75,27 @@ export default function UserWebPage() {
       };
       localStorage.setItem("have_been_visitor", JSON.stringify(true));
       localStorage.setItem("data_user_bio", JSON.stringify(dataUserParam));
+
+      sendNotification(user, history_visitors);
     }
   };
 
-  if (user?.exists) {
-    incrementVisitors(user);
+  const sendNotification = (user, history_visitors) => {
+    history_visitors = history_visitors.length + 1;
+    if (history_visitors % 10 === 0) {
+      api.sendNotification({
+        to: user.data().fcmToken,
+        notification: {
+          title: "Yazz Linker",
+          body: `${history_visitors} people have visited your profile`,
+          image: user.data().photoURL,
+        },
+      });
+    }
+  };
+
+  if (user?.exists && !_.isEmpty(history_visitors)) {
+    incrementVisitors(user, history_visitors);
     // console.log(user);
   }
 

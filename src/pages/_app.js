@@ -7,8 +7,7 @@ import { AuthProvider } from "yazz/context/AuthContext";
 import { useEffect } from "react";
 import nProgress from "nprogress";
 import Router from "next/router";
-import { AppContextProvider, useAppContext } from "yazz/context/AppContext";
-import ModalShareButton from "yazz/components/Admin/ModalShareButton";
+import { AppContextProvider } from "yazz/context/AppContext";
 
 export default function App({ Component, pageProps }) {
   useEffect(() => {
